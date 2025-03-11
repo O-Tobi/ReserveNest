@@ -1,0 +1,35 @@
+user schema:
+-uuid
+-name
+-email
+-profile pic url
+-role
+-location
+-saved restaurant
+-bookings
+-payment details
+-reviews and ratings
+
+Restaurant schema:
+-uuid
+-name
+-location
+-menu list
+-ratings
+-about
+-tags
+-opening hours
+-price
+-available offers
+-open time slot
+-available seats
+
+
+menu schema:
+-uuid
+-name 
+-type (vegan or non-vegan)
+-region (continental, african, mexican etc)
+-tags
+
+
