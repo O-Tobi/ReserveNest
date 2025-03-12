@@ -32,4 +32,10 @@ menu schema:
 -region (continental, african, mexican etc)
 -tags
 
-
+bookings:
+-uuid
+-user
+-restaurant
+-address
+-date
+-number of guest
