@@ -25,7 +25,7 @@ Restaurant schema:
 -available seats
 
 
-menu schema:
+menu schema: // done
 -uuid
 -name 
 -type (vegan or non-vegan)
