@@ -26,3 +26,23 @@ export async function GET() {
     }  
   }  
 }  
+
+// Post a single meal
+export async function POST(request: Request) {
+    try {
+        await connectDB();
+        const data = await request.json();
+
+        if (!data) {
+            return new NextResponse(JSON.stringify({ error: "Invalid input data" }), { status: 400 });
+        }
+
+        const newMenu = new menu(data);
+        await newMenu.save();
+
+        return new NextResponse(JSON.stringify({ newMenu }), { status: 201 });
+    } catch (error) {
+        console.error("Error creating menu:", error);
+        return new NextResponse(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+    }
+};
