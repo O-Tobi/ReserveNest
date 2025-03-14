@@ -1,37 +1,37 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import restaurant from "@/models/restaurant"; // ✅ Correct lowercase import
+import user from "@/models/user";
 import { Types } from "mongoose";
 
-// Get a single restaurant
+
+// fetch a user
 export async function GET(request: Request, context: { params: { id: string } }) {
     try {
         await connectDB();
         const id = context.params?.id; // Correctly access params
 
         if (!id) {
-            return new NextResponse(JSON.stringify({ error: "restaurant ID is required" }), { status: 400 });
+            return new NextResponse(JSON.stringify({ error: "user ID is required" }), { status: 400 });
         }
 
         if (!Types.ObjectId.isValid(id)) {
             return new NextResponse(JSON.stringify({ error: "Invalid ID format" }), { status: 400 });
         }
 
-        const restaurantItem = await restaurant.findById(new Types.ObjectId(id));
+        const userItem = await user.findById(new Types.ObjectId(id));
 
-        if (!restaurantItem) {
-            return new NextResponse(JSON.stringify({ error: "restaurant item not found" }), { status: 404 });
+        if (!userItem) {
+            return new NextResponse(JSON.stringify({ error: "user item not found" }), { status: 404 });
         }
 
-        return NextResponse.json({ restaurant: restaurantItem });
+        return NextResponse.json({ user: userItem });
     } catch (error) {
-        console.error("Error fetching restaurant item:", error);
+        console.error("Error fetching user item:", error);
         return new NextResponse(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
     }
 }
 
-
-// Update a Restaurant
+// Update a user //make sure the email is not updated
 export async function PATCH(request: Request) {  
   try {  
     await connectDB();  
@@ -41,20 +41,21 @@ export async function PATCH(request: Request) {
       return new NextResponse(JSON.stringify({ error: "Invalid input data" }), { status: 400 });  
     }  
 
-    const updatedRestaurant = await restaurant.findByIdAndUpdate(id, updateData, { new: true });  
+    const updatedUser = await user.findByIdAndUpdate(id, updateData, { new: true });  
 
-    if (!updatedRestaurant) {  
-      return new NextResponse(JSON.stringify({ error: "Restaurant item not found" }), { status: 404 });  
+    if (!updatedUser) {  
+      return new NextResponse(JSON.stringify({ error: "user item not found" }), { status: 404 });  
     }  
 
-    return new NextResponse(JSON.stringify({ updatedRestaurant }), { status: 200 });  
+    return new NextResponse(JSON.stringify({ updatedUser }), { status: 200 });  
   } catch (error) {  
-    console.error("Error updating restaurant:", error);  
+    console.error("Error updating user:", error);  
     return new NextResponse(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });  
   }  
 }  
 
-// Delete a restaurant
+
+// Delete a user
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
     try {
         await connectDB();
@@ -65,15 +66,15 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
             return new NextResponse(JSON.stringify({ error: "Invalid input data" }), { status: 400 });
         }
 
-        const deletedRestaurant = await restaurant.findByIdAndDelete(id);
+        const deletedUser = await user.findByIdAndDelete(id);
 
-        if (!deletedRestaurant) {
-            return new NextResponse(JSON.stringify({ error: "restaurant item not found" }), { status: 404 });
+        if (!deletedUser) {
+            return new NextResponse(JSON.stringify({ error: "user item not found" }), { status: 404 });
         }
 
-        return new NextResponse(JSON.stringify({ message: "restaurant item deleted successfully" }), { status: 200 });
+        return new NextResponse(JSON.stringify({ message: "user item deleted successfully" }), { status: 200 });
     } catch (error) {
-        console.error("Error deleting restaurant:", error);
+        console.error("Error deleting user:", error);
         return new NextResponse(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
     }
 }
