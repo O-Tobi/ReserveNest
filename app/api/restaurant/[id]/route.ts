@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import restaurant from "@/models/restaurant"; // ✅ Correct lowercase import
+import restaurant from "@/models/restaurant";
 import { Types } from "mongoose";
 
 // Get a single restaurant
