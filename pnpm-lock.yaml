@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@next/font':
+        specifier: ^14.2.15
+        version: 14.2.15(next@15.2.2-canary.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@radix-ui/react-slot':
         specifier: ^1.1.2
         version: 1.1.2(@types/react@19.0.10)(react@19.0.0)
@@ -263,6 +266,11 @@ packages:
 
   '@next/eslint-plugin-next@15.2.2-canary.6':
     resolution: {integrity: sha512-HN7pRJcuABHlqwM+Jt0if13lX56DZgIkQs48MBMeG/BeAZ4NG9CLpEG6hpRCCh+AhJ7Oj8rLuKfuiqv1FmtJlg==}
+
+  '@next/font@14.2.15':
+    resolution: {integrity: sha512-QopYhBmCDDrNDynbi+ZD1hDZXmQXVFo7TmAFp4DQgO/kogz1OLbQ92hPigJbj572eZ3GaaVxNIyYVn3/eAsehg==}
+    peerDependencies:
+      next: '*'
 
   '@next/swc-darwin-arm64@15.2.2-canary.6':
     resolution: {integrity: sha512-MyjhCU1GInYgiaWkfzqPnikOJPkYAEZuRgXDoF3qkYEwEjFeTHp2aimrAVln16JmIb5nTcLEWSBkVt9UHb/ucA==}
@@ -1970,6 +1978,10 @@ snapshots:
   '@next/eslint-plugin-next@15.2.2-canary.6':
     dependencies:
       fast-glob: 3.3.1
+
+  '@next/font@14.2.15(next@15.2.2-canary.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+    dependencies:
+      next: 15.2.2-canary.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   '@next/swc-darwin-arm64@15.2.2-canary.6':
     optional: true

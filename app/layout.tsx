@@ -1,14 +1,17 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import Header from "@/components/ui/Header";
+import Footer from "@/components/ui/Footer";
+import "./globals.css";
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <SessionProviderWrapper session={session}>{children}</SessionProviderWrapper>
+        <SessionProviderWrapper>
+          <Header />
+          {children}
+          <Footer />
+        </SessionProviderWrapper>
       </body>
     </html>
   );
