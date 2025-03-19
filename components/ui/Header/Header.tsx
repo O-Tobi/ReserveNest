@@ -1,8 +1,11 @@
 "use client";
 
-import LoginButton from "./LoginButton";
 import { Architects_Daughter } from "next/font/google";
-import { Input } from "./input";
+import { UserProfile } from "./UserProfile";
+import { UserLocation } from "./UserLocation";
+
+
+
 
 const architectsDaughter = Architects_Daughter({
   subsets: ["latin"],
@@ -16,11 +19,10 @@ export default function Header() {
         <h1 className={`${architectsDaughter.className}`}>ReserveNest</h1>
       </div>
       
-      <div className="w-[425px] h-[48px] ">
-      <Input type="text" placeholder="Search restaurant and cuisines..." className="px-[16px] py-[12px] border-[#C5C5C5] border-[1px] bg-white text-[12px] "/>
+      <div className="flex items-center gap-[12px] ">
+      <UserLocation />
+      <UserProfile />
       </div>
-      
-      <LoginButton />
     </div>
   );
 }
