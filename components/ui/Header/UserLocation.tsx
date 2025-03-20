@@ -35,7 +35,7 @@ export function UserLocation() {
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-auto lg:w-[211px] border-[1px] border-[#C5C5C5]">
+      <DropdownMenuContent className="bg-white w-auto lg:w-[211px] border-[1px] border-[#C5C5C5]">
         <DropdownMenuLabel>Select Location</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
