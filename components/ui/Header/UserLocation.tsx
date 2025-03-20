@@ -3,7 +3,6 @@
 import * as React from "react";
 import { ChevronDown, MapPin } from "lucide-react";
 
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,19 +19,23 @@ export function UserLocation() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="">
-        <div className="flex items-center gap-[16px] px-[12px] py-[8px] w-[211px] h-[48px]  justify-between rounded-[8px] border-[1px] border-[#C5C5C5] ">
+        <div className="flex items-center gap-[16px] md:px-[12px] md:py-[8px] w-[24px] h-[24px] md:w-[211px] md:h-[48px]  justify-between rounded-[8px] md:border-[1px] border-[#C5C5C5] ">
           <div className="flex items-center gap-[12px]">
-            <div><MapPin /></div>
+            <div >
+              <MapPin className="text-[#007E47]  md:text-black h-[24px] w-[24px]"/>
+            </div>
             <div>
-              <p className="text-[8px]">Your Location</p>
-              <p className="text-[12px]">{position}</p>
+              <p className="text-[8px] hidden md:block">Your Location</p>
+              <p className="text-[12px] hidden md:block">{position}</p>
             </div>
           </div>
 
-          <div><ChevronDown /></div>
+          <div>
+            <ChevronDown className="hidden md:block" />
+          </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[211px] border-[1px] border-[#C5C5C5]">
+      <DropdownMenuContent className="w-auto lg:w-[211px] border-[1px] border-[#C5C5C5]">
         <DropdownMenuLabel>Select Location</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
