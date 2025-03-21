@@ -50,8 +50,8 @@ export default function HeroTimePicker() {
       
   return (
     <Select>
-      <SelectTrigger className="h-full w-1/3  bg-white text-[darkGreen] ">
-        <div className="flex items-center gap-[8px] ">
+      <SelectTrigger className="w-[200px] md:w-1/3   bg-white text-[darkGreen] ">
+        <div className="flex items-center gap-[18px] md:gap-[8px] ">
         <Clock4 />
         <SelectValue placeholder="Select Time" />
         </div>

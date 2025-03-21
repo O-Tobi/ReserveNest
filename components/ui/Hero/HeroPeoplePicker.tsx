@@ -20,8 +20,8 @@ export default function HeroPeoplePicker() {
 
   return (
     <Select value={selectedGuest} onValueChange={setSelectedGuest}>
-      <SelectTrigger className="w-1/3 h-full bg-white text-[darkGreen]">
-        <div className="flex items-center gap-[8px]">
+      <SelectTrigger className=" w-full md:w-1/3 h-full bg-white text-[darkGreen]">
+        <div className="flex items-center gap-[18px] md:gap-[8px]">
           <UserRound />
           <SelectValue placeholder="Select Guest" />
         </div>

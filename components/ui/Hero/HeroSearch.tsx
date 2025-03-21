@@ -38,8 +38,9 @@ export default function HeroSearch() {
   //   });
 
   return (
-    <div className="flex items-center justify-center gap-[12px]">
-      <div className="flex justify-between items-center w-[600px] ">
+    <div className="flex flex-col md:flex-row  items-center justify-center gap-[12px]">
+      <div className="flex flex-col md:flex-row justify-between items-center  md:w-[600px] ">
+        {/* put all of these in a form and add a submit button (findTable) */}
         <HeroDatePicker />
         <HeroTimePicker />
         <HeroPeoplePicker />
