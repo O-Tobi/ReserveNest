@@ -4,6 +4,9 @@
 // import { useForm } from "react-hook-form";
 // import { z } from "zod";
 import { HeroDatePicker } from "./HeroDatePicker";
+import HeroPeoplePicker from "./HeroPeoplePicker";
+import HeroTimePicker from "./HeroTmePicker";
+import SearchInput from "./Search";
 
 // import { Button } from "@/components/ui/button";
 // import {
@@ -25,18 +28,24 @@ import { HeroDatePicker } from "./HeroDatePicker";
 // });
 
 export default function HeroSearch() {
-//   const form = useForm<z.infer<typeof formSchema>>({
-//     resolver: zodResolver(formSchema),
-//     defaultValues: {
-//       date: new Date(),
-//       time: new Date().toISOString().split("T")[1].slice(0, 5),
-//       number: 2,
-//     },
-//   });
+  //   const form = useForm<z.infer<typeof formSchema>>({
+  //     resolver: zodResolver(formSchema),
+  //     defaultValues: {
+  //       date: new Date(),
+  //       time: new Date().toISOString().split("T")[1].slice(0, 5),
+  //       number: 2,
+  //     },
+  //   });
 
   return (
-    <div>
+    <div className="flex items-center justify-center gap-[12px]">
+      <div className="flex justify-between items-center w-[600px] ">
         <HeroDatePicker />
+        <HeroTimePicker />
+        <HeroPeoplePicker />
+      </div>
+
+      <SearchInput />
     </div>
   );
 }

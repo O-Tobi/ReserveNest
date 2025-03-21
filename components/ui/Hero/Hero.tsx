@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { HeroBg } from "../assets/assets";
 import HeroSearch from "./HeroSearch";
-import HeroTimePicker from "./HeroTmePicker";
+// import HeroTimePicker from "./HeroTmePicker";
+// import HeroPeoplePicker from "./HeroPeoplePicker";
 
 export default function Hero() {
     return (
@@ -13,9 +14,8 @@ export default function Hero() {
                 className="w-full h-full object-cover rounded-[20px]"
                 />
             </div>
-            <div className="absolute z-10 flex inset-x-0 mx-[70px] my-[-50px] p-[40px] gap-[12px] bg-[darkGreen] rounded-[20px]">
+            <div className="absolute z-10 flex flex-col md:flex-row inset-x-0 mx-[70px] my-[-85 px] p-[40px]  bg-[darkGreen] rounded-[20px]">
                 <HeroSearch />
-                <HeroTimePicker />
             </div>
         </div>
     )

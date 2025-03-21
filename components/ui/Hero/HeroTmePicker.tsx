@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Clock4 } from "lucide-react";
 
 export default function HeroTimePicker() {
     const timeList = [
@@ -49,12 +50,16 @@ export default function HeroTimePicker() {
       
   return (
     <Select>
-      <SelectTrigger className="w-[205px] bg-white text-[darkGreen] ">
+      <SelectTrigger className="h-full w-1/3  bg-white text-[darkGreen] ">
+        <div className="flex items-center gap-[8px] ">
+        <Clock4 />
         <SelectValue placeholder="Select Time" />
+        </div>
+        
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="border-white text-wh">
         <SelectGroup className="bg-white text-[darkGreen]">
-          <SelectLabel>Select Time</SelectLabel>
+          <SelectLabel> Select Time</SelectLabel>
           {timeList.map((tl, index) => (
             <SelectItem key={index} value={tl}>{tl}</SelectItem>
           ))}

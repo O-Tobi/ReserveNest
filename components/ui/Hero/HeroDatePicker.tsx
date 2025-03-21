@@ -22,7 +22,7 @@ export function HeroDatePicker() {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[205px] gap-[16px] justify-between text-left font-normal bg-white  text-[darkGreen]",
+            "w-1/3 h-full gap-[8px] justify-between text-left font-normal bg-white  text-[darkGreen]",
             !date && "text-muted-foreground"
           )}
           
