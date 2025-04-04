@@ -1,24 +1,20 @@
 "use client";
 
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useForm } from "react-hook-form";
-// import { z } from "zod";
 import { HeroDatePicker } from "./HeroDatePicker";
 import HeroPeoplePicker from "./HeroPeoplePicker";
-import HeroTimePicker from "./HeroTmePicker";
+import HeroTimePicker from "./HeroTimePicker";
 import SearchInput from "./Search";
+import { Button } from "../button";
+import useSearchContext from "@/app/contexts/useSearchContext";
 
-// import { Button } from "@/components/ui/button";
+
 // import {
 //   Form,
 //   FormControl,
-//   FormDescription,
 //   FormField,
 //   FormItem,
-//   FormLabel,
-//   FormMessage,
 // } from "@/components/ui/form";
-// import { Input } from "@/components/ui/input";
+//import { Input } from "@/components/ui/input";
 
 // Define the form schema
 // const formSchema = z.object({
@@ -28,25 +24,55 @@ import SearchInput from "./Search";
 // });
 
 export default function HeroSearch() {
-  //   const form = useForm<z.infer<typeof formSchema>>({
-  //     resolver: zodResolver(formSchema),
-  //     defaultValues: {
-  //       date: new Date(),
-  //       time: new Date().toISOString().split("T")[1].slice(0, 5),
-  //       number: 2,
-  //     },
-  //   });
+  const {
+    searchInput,
+    datePicked,
+    guestPicked,
+    timePicked,
+  } = useSearchContext();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const searchData = {
+      search: searchInput,
+      date: datePicked,
+      guests: guestPicked,
+      time: timePicked
+    };
+
+    console.log('Search Data:', searchData);
+  };
+
+
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     date: new Date(),
+  //     time: "",
+  //     number: 2,
+  //   },
+  // });
 
   return (
-    <div className="flex flex-col md:flex-row  items-center justify-center gap-[12px]">
-      <div className="flex flex-col md:flex-row justify-between items-center  md:w-[600px] ">
-        {/* put all of these in a form and add a submit button (findTable) */}
+    <form 
+      className="flex flex-col md:flex-row items-center justify-center gap-[12px] lg:gap-[20px]"
+      onSubmit={handleSubmit}
+    >
+      <div className="flex flex-col md:flex-row justify-between items-center md:w-[60%]">
         <HeroDatePicker />
         <HeroTimePicker />
         <HeroPeoplePicker />
       </div>
 
-      <SearchInput />
-    </div>
+      <div className="flex md:w-[40%]">
+        <SearchInput />
+        <Button
+          className="bg-[#007E47] text-white px-4 py-2 rounded-md w-full md:w-[100px]"
+          type="submit"
+        >
+          Find Table
+        </Button>
+      </div>
+    </form>
   );
 }

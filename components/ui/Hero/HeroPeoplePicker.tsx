@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import {
@@ -11,17 +11,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserRound } from "lucide-react";
-import { useState } from "react";
+import useSearchContext from "@/app/contexts/useSearchContext";
 
 export default function HeroPeoplePicker() {
-  const [selectedGuest, setSelectedGuest] = useState("");
+  const { setGuestPicked } = useSearchContext();
 
   const guestList = ["2", "3", "4", "5", "6", "7", "8"];
 
   return (
-    <Select value={selectedGuest} onValueChange={setSelectedGuest}>
+    <Select
+      onValueChange={(value) => {
+        setGuestPicked(value);
+      }}
+    >
       <SelectTrigger className=" w-full md:w-1/3 h-full bg-white text-[darkGreen]">
-        <div className="flex items-center gap-[18px] md:gap-[8px]">
+        <div className="flex items-center gap-[1.125rem] md:gap-[.5rem]">
           <UserRound />
           <SelectValue placeholder="Select Guest" />
         </div>
