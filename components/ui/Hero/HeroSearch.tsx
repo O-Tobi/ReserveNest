@@ -29,6 +29,10 @@ export default function HeroSearch() {
     datePicked,
     guestPicked,
     timePicked,
+    setSearchInput,
+    setDatePicked,
+    setGuestPicked,
+    setTimePicked
   } = useSearchContext();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,16 +46,14 @@ export default function HeroSearch() {
     };
 
     console.log('Search Data:', searchData);
+
+    setSearchInput("");
+    setDatePicked("");
+    setGuestPicked("");
+    setTimePicked("");
+
   };
 
-
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     date: new Date(),
-  //     time: "",
-  //     number: 2,
-  //   },
-  // });
 
   return (
     <form 
@@ -64,7 +66,7 @@ export default function HeroSearch() {
         <HeroPeoplePicker />
       </div>
 
-      <div className="flex md:w-[40%]">
+      <div className="flex flex-col md:flex-row md:w-[40%]">
         <SearchInput />
         <Button
           className="bg-[#007E47] text-white px-4 py-2 rounded-md w-full md:w-[100px]"
