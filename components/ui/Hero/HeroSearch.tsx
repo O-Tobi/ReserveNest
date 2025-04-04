@@ -47,6 +47,7 @@ export default function HeroSearch() {
 
     console.log('Search Data:', searchData);
 
+    //selectime and guestpicked fails to clear the ui while nothing is saved in the context
     setSearchInput("");
     setDatePicked("");
     setGuestPicked("");
