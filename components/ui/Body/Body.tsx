@@ -1,8 +1,12 @@
+"use client";
+
+import FeaturedHotels from "./FeaturedHotels";
+
 export default function Body() {
-    return (
-        <div className="bg-red-500">
-            <h1>Body</h1>
-            <p>this is the body</p>
-        </div>
-    )
-};
+  
+  return (
+    <div className="flex flex-col mx-[30px] mt-[40px] md:mx-[70px]">
+      <FeaturedHotels />
+    </div>
+  );
+}
