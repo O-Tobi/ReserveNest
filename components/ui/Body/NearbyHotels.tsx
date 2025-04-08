@@ -13,7 +13,7 @@ type Hotel = {
   image: string;
 };
 
-export default function FeaturedHotels() {
+export default function NearbyHotels() {
   const [data, setData] = useState<Hotel[] | null>(null);
 
   useEffect(() => {
@@ -30,9 +30,13 @@ export default function FeaturedHotels() {
 
   return (
     <div className="flex flex-col  gap-[24px]">
-      <h2 className="text-center md:px-[12px] md:text-left text-[30px] md:text-[40px] leading-[44px] font-semibold bg-gradient-to-r from-[#00854A] to-[#0CD27B] bg-clip-text text-transparent mb-[26px]">
-        Featured Hotels near you
-      </h2>
+      <div className="flex mb-[26px] md:px-[12px] justify-center md:justify-start items-center md:items-end  gap-[24px]">
+        <h2 className="text-[30px] md:text-[40px] leading-[44px] font-semibold bg-gradient-to-r from-[#00854A] to-[#0CD27B] bg-clip-text text-transparent">
+          Hotels near you
+        </h2>
+        <p className="hidden md:block text-[18px] text-[darkGreen] leading-[29px] tracking-[0.25px] font-normal underline">See all</p>
+      </div>
+
       <div className="flex flex-wrap justify-center items-center gap-[20px]">
         {data.map((d, id) => (
           <div key={id}>
@@ -66,6 +70,10 @@ export default function FeaturedHotels() {
           </div>
         ))}
       </div>
+      <div className="flex justify-center md:hidden">
+        <p className="text-[18px] text-[darkGreen] leading-[29px] tracking-[0.25px] font-normal underline">See all</p>
+      </div>
+
     </div>
   );
 }
