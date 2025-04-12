@@ -24,9 +24,7 @@ export default function Cuisines() {
     fetchData();
   }, []);
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  if (!data) return null;
 
   return (
     <div className="flex flex-col  gap-[24px]">

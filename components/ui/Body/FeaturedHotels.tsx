@@ -4,6 +4,7 @@ import getMockData from "@/lib/data";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
+
 type Hotel = {
   avatar: string;
   hotelName: string;
@@ -24,9 +25,7 @@ export default function FeaturedHotels() {
     fetchData();
   }, []);
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  if (!data) return null;
 
   return (
     <div className="flex flex-col  gap-[24px]">
