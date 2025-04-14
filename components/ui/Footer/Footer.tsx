@@ -1,13 +1,9 @@
-"use client"
+"use client";
 
-import { signIn, signOut } from "next-auth/react";
-import { Button } from "../button";
-
-export default function Footer () {
-    return (
-        <div>
-            <Button onClick={() => signOut()}>SignOut</Button>
-            <Button onClick={() => signIn()}>SignIn</Button>
-            </div>
-    )
-};
+export default function Footer() {
+  return (
+    <div className="h-[320px] bg-[darkgreen] mt-[80px]">
+      
+    </div>
+  );
+}
