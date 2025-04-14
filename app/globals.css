@@ -31,3 +31,7 @@
     transform: translateX(-100%);
   }
 }
+
+html, body{
+  background-color: #DDDDDD;
+}

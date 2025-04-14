@@ -36,7 +36,7 @@ export default function NearbyHotels() {
       </div>
 
       <div className="flex flex-wrap justify-center items-center gap-[20px]">
-        {data.map((d, id) => (
+        {data.slice(5, 9).map((d, id) => (
           <div key={id}>
             <div className="flex flex-col shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-500 bg-white h-full w-[300px] md:w-[280px] rounded-[8px] px-[12px] pt-[12px] pb-[20px]" >
               <Image
