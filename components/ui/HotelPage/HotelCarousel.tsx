@@ -34,7 +34,7 @@ export default function HotelCarousel({ imgList }: HotelCarouselProp) {
               width={100}
               height={100}
               alt={`hotel ${img}`}
-              className="w-full h-[277px] md:h-[400px] lg:h-[425px] object-cover rounded-[20px] "
+              className="w-full h-[277px] md:h-[400px] lg:h-[425px] object-cover rounded-[20px]"
             />
           </SwiperSlide>
         ))}

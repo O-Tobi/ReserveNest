@@ -6,7 +6,14 @@ import getMockData from "@/lib/data";
 //import Image from "next/image";
 import HotelCarousel from "@/components/ui/HotelPage/HotelCarousel";
 import { HeroBg } from "@/components/ui/assets/assets";
-import { Star, CircleDollarSign, MapPin, Clock } from "lucide-react";
+import {
+  Star,
+  CircleDollarSign,
+  MapPin,
+  Clock,
+  BadgeAlert,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Hotel = {
   id: string;
@@ -18,6 +25,8 @@ type Hotel = {
   image: string;
   pictures: string;
   openingTime: string;
+  availableOffers: number;
+  closingTime: number;
 };
 
 export default function Hotel() {
@@ -43,12 +52,13 @@ export default function Hotel() {
 
   return (
     <div className="flex flex-col lg:flex-row items-center px-[30px] lg:px-[40px] gap-[40px]">
-      <div className="firstHalf w-full lg:w-2/3">
+      {/* hotel hero */}
+      <div className="firstHalf w-full lg:w-2/3 ">
         <div>
           <HotelCarousel imgList={testList} />
         </div>
         <div className="bg-white rounded-[12px] my-[22px] px-[16px] py-[24px] lg:px-[24px] lg:py-[32px]">
-          <div className="flex lg:flex-row flex-col justify-center items-center lg:justify-between mb-[30px] gap-[20px]">
+          <div className="flex md:flex-row flex-col justify-center items-center md:justify-between mb-[30px] gap-[20px]">
             <h2 className="text-[24px] lg:text-[32px] leading-[28px] font-medium text-[darkgreen]">
               {hotel.hotelName}
             </h2>
@@ -58,23 +68,77 @@ export default function Hotel() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-[20px]">
-            <div className="flex flex-wrap lg:flex-nowrap gap-[20px] justify-center lg:justify-between items-center text-[#202020]">
-              <p className="flex w-1/2 gap-[16px] ">
-                <CircleDollarSign /> {hotel.price}
+          {/* time, location and price */}
+          <div className="flex flex-col md:flex-row md:flex-wrap gap-[20px] justify-center md:justify-between items-center text-[#202020]">
+            <p className="flex flex-row items-center text-center gap-[16px] w-full md:w-[calc(50%-10px)] px-4 py-2">
+              <CircleDollarSign /> {hotel.price}
+            </p>
+            <p className="flex flex-row items-center text-center  gap-[16px] w-full md:w-[calc(50%-10px)] px-4 py-2">
+              <MapPin /> {hotel.location}
+            </p>
+            <p className="flex flex-row items-center text-center gap-[16px] w-full md:w-[calc(50%-10px)] px-4 py-2">
+              <Clock /> <span className="text-[darkGreen]">Open from</span>{" "}
+              {hotel.openingTime}
+            </p>
+          </div>
+        </div>
+        {/* Available offers */}
+        <div className="flex flex-col justify-center  items-center gap-[20px] p-[20px] rounded-[12px] bg-white">
+          <h2 className="text-[22px] text-[darkGreen] leading-[28px]">
+            Available Offers
+          </h2>
+          {/* offers here */}
+          <div className="flex flex-col gap-[12px] justify-center  w-full bg-[lightgreen]/5">
+            {/* map this section when you're implementing the backend */}
+            {/* this should be a form with that tracks submission */}
+            <div className="text-[darkGreen] flex flex-col md:flex-row items-center justify-center md:justify-between w-full rounded-[8px] border-[1px] border-[#004225] p-[12px] md:h-[72px] gap-[12px]">
+              <p className="flex gap-[10px]">
+                <BadgeAlert /> Sun, {hotel.openingTime} - {hotel.closingTime}
               </p>
-              <p className="flex w-1/2 gap-[16px]">
-                <MapPin /> {hotel.location}
+              <p>
+                <span className="text-[lightGreen]">
+                  {hotel.availableOffers}
+                </span>{" "}
+                offers available
               </p>
+              <Button className="bg-[darkGreen] rounded-[8px] text-white">
+                Book Now
+              </Button>
             </div>
-
-            <div className="flex  gap-[20px] w-full justify-center lg:justify-between items-center flex-wrap text-[#202020]">
-              <p className="flex  w-1/2 gap-[16px]">
-                <Clock /> <span className="text-[darkGreen]"></span>{" "}
-                {hotel.openingTime}{" "}
+            <div className="text-[darkGreen] flex flex-col md:flex-row items-center justify-center md:justify-between w-full rounded-[8px] border-[1px] border-[#004225] p-[12px] md:h-[72px] gap-[12px]">
+              <p className="flex gap-[10px]">
+                <BadgeAlert /> Sun, {hotel.openingTime} - {hotel.closingTime}
               </p>
+              <p>
+                <span className="text-[lightGreen]">
+                  {hotel.availableOffers}
+                </span>{" "}
+                offers available
+              </p>
+              <Button className="bg-[darkGreen] rounded-[8px] text-white">
+                Book Now
+              </Button>
+            </div>
+            <div className="text-[darkGreen] flex flex-col md:flex-row items-center justify-center md:justify-between w-full rounded-[8px] border-[1px] border-[#004225] p-[12px] md:h-[72px] gap-[12px]">
+              <p className="flex gap-[10px]">
+                <BadgeAlert /> Sun, {hotel.openingTime} - {hotel.closingTime}
+              </p>
+              <p>
+                <span className="text-[lightGreen]">
+                  {hotel.availableOffers}
+                </span>{" "}
+                offers available
+              </p>
+              <Button className="bg-[darkGreen] rounded-[8px] text-white">
+                Book Now
+              </Button>
             </div>
           </div>
+        </div>
+
+        {/* menu goes here */}
+        <div className="bg-red-500 rounded-[16px] ">
+          <h2>Our Menu</h2>
         </div>
       </div>
       <div className="secondHalf mx-[50px] lg:mx-0  w-full lg:w-1/3 bg-red-500">
