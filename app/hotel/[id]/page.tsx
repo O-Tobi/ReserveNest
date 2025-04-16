@@ -14,6 +14,7 @@ import {
   BadgeAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MenuAccordion from "@/components/ui/HotelPage/MenuAccordion";
 
 type Hotel = {
   id: string;
@@ -137,8 +138,13 @@ export default function Hotel() {
         </div>
 
         {/* menu goes here */}
-        <div className="bg-red-500 rounded-[16px] ">
-          <h2>Our Menu</h2>
+        <div className="bg-white rounded-[16px] mt-[20px] ">
+          <MenuAccordion
+          name={hotel.hotelName}
+          type="Vegetarian"
+          price={hotel.price}
+          menuImage={hotel.avatar}
+          />
         </div>
       </div>
       <div className="secondHalf mx-[50px] lg:mx-0  w-full lg:w-1/3 bg-red-500">
