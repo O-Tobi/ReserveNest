@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Accordion,
@@ -8,12 +8,16 @@ import {
 } from "@/components/ui/accordion";
 import MenuSearch from "./MenuSearch";
 import Image from "next/image";
+import { SquarePlusIcon, SquareMinusIcon } from "lucide-react";
+import { Button } from "../button";
+import { useState } from "react";
 
 type MenuProps = {
   name: string;
   type: string;
   price: number;
   menuImage: string;
+  mealRating: number;
 };
 
 export default function MenuAccordion({
@@ -21,7 +25,20 @@ export default function MenuAccordion({
   type,
   price,
   menuImage,
+  mealRating,
 }: MenuProps) {
+    const [mealCount, setMealCount] = useState(0);
+
+    const handleMealPlus = () => {
+      setMealCount(prevCount => prevCount + 1);
+    };
+
+    const handleMealMinus = () => {
+      if (mealCount !== 0) {
+        setMealCount(prev => prev-1)
+      }
+    };
+
   return (
     <Accordion type="single" collapsible>
       {/* the accordionItem value should contain the name of the menu you're mapping through */}
@@ -50,7 +67,20 @@ export default function MenuAccordion({
             </div>
           </div>
 
-          <div className="leftSide">ddddd</div>
+          <div className="flex flex-row justify-between items-center md:flex-col gap-[40px] mt-[12px]">
+            <div className="text-[darkGreen]">{mealRating}</div>
+            <div className="flex  items-center ">
+              <Button onClick={handleMealMinus}>
+                {" "}
+                <SquareMinusIcon />{" "}
+              </Button>
+              {mealCount}
+              <Button onClick={handleMealPlus}>
+                {" "}
+                <SquarePlusIcon />{" "}
+              </Button>
+            </div>
+          </div>
         </AccordionContent>
       </AccordionItem>
     </Accordion>
