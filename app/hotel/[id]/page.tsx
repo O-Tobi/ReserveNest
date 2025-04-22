@@ -9,6 +9,7 @@ import { Star, CircleDollarSign, MapPin, Clock } from "lucide-react";
 import MenuAccordion from "@/components/ui/HotelPage/MenuAccordion";
 import AvailableOffers from "@/components/ui/HotelPage/AvailableOffers";
 import RatingsAndReviews from "@/components/ui/HotelPage/RatingsAndReviews";
+import BookingForm from "@/components/ui/HotelPage/BookingForm";
 
 type Hotel = {
   id: string;
@@ -46,9 +47,9 @@ export default function Hotel() {
   if (!hotel) return null;
 
   return (
-    <div className="flex flex-col lg:flex-row items-center px-[30px] lg:px-[40px] gap-[40px]">
+    <div className="flex flex-col lg:flex-row justify-between px-[30px] lg:px-[40px] gap-[40px]">
       {/* hotel hero */}
-      <div className="firstHalf w-full lg:w-2/3 ">
+      <div className="firstHalf w-full lg:w-2/3">
         <div>
           <HotelCarousel imgList={testList} />
         </div>
@@ -107,11 +108,8 @@ export default function Hotel() {
       </div>
 
       {/* second half */}
-      <div className="secondHalf mx-[50px] lg:mx-0  w-full lg:w-1/3 bg-red-500">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat vero
-        rerum hic impedit autem, dolorem animi nemo. Debitis quibusdam obcaecati
-        repellendus sit esse, delectus enim distinctio deserunt eaque
-        repudiandae modi.
+      <div className="secondHalf flex justify-center w-full lg:w-1/3">
+       <BookingForm />
       </div>
     </div>
   );

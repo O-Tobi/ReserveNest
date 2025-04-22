@@ -47,6 +47,13 @@ export function HeroDatePicker() {
               setDatePicked(format(date, "yyyy-MM-dd"));
             }
           }}
+
+          modifiersStyles={{
+            selected: {
+              backgroundColor: "#004225",
+              color: 'white'
+            }
+          }}
           initialFocus
           className="bg-white text-[darkGreen]"
         />

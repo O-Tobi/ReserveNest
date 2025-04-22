@@ -8,20 +8,6 @@ import { Button } from "../button";
 import useSearchContext from "@/app/contexts/useSearchContext";
 
 
-// import {
-//   Form,
-//   FormControl,
-//   FormField,
-//   FormItem,
-// } from "@/components/ui/form";
-//import { Input } from "@/components/ui/input";
-
-// Define the form schema
-// const formSchema = z.object({
-//   date: z.date(), // Use z.date() for a Date object
-//   time: z.string(), // Keep as string if using time inputs
-//   number: z.number().int(),
-// });
 
 export default function HeroSearch() {
   const {
