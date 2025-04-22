@@ -7,7 +7,11 @@ type AvailableOffersProps = {
   closingTime: number;
 };
 
-export default function AvailableOffers({openingTime, closingTime, availableOffers}: AvailableOffersProps) {
+export default function AvailableOffers({
+  openingTime,
+  closingTime,
+  availableOffers,
+}: AvailableOffersProps) {
   return (
     <div className="flex flex-col justify-center  items-center md:items-start gap-[20px] p-[20px] rounded-[12px] bg-white">
       <h2 className="text-[22px] text-[darkGreen] leading-[28px]">
@@ -34,8 +38,8 @@ export default function AvailableOffers({openingTime, closingTime, availableOffe
             <BadgeAlert /> Sun, {openingTime} - {closingTime}
           </p>
           <p>
-            <span className="text-[lightGreen]">{availableOffers}</span>{" "}
-            offers available
+            <span className="text-[lightGreen]">{availableOffers}</span> offers
+            available
           </p>
           <Button className="bg-[darkGreen] rounded-[8px] text-white">
             Book Now

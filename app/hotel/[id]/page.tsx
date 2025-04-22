@@ -131,8 +131,8 @@ export default function Hotel() {
           </div>
 
           {/* reviews here */}
-          <div className="reviews flex w-full  gap-[20px]">
-            <div className="singleReview w-full md:w-1/2 p-[20px] bg-white rounded-[12px]">
+          <div className="reviews flex flex-wrap w-full  gap-[20px] md:justify-between">
+            <div className="singleReview w-full md:w-[calc(50%-10px)] p-[20px] bg-white rounded-[12px]">
               <div className="imgLine flex justify-between mb-[12px]">
                 <div className="flex gap-[18px] items-center">
                   <Image
@@ -150,8 +150,6 @@ export default function Hotel() {
                 <p className="text-[darkGreen] flex items-center gap-[8px]">
                   {hotel.rating} <Star />
                 </p>
-
-               
               </div>
 
               <p className="mb-[12px] text-[#5F5F5F] text-[12px]">
@@ -161,13 +159,193 @@ export default function Hotel() {
                 Eius, omnis itaque.
               </p>
 
-               {/* put conditionals for if image is available */}
-                {/* map through the image if available */}
-                <div className="flex w-full gap-[8px]">
-                  <Image src={hotel.avatar} alt={hotel.hotelName} width={61} height={61} className="rounded-[8px]" />
-                  <Image src={hotel.avatar} alt={hotel.hotelName} width={61} height={61} className="rounded-[8px]" />
-                  <Image src={hotel.avatar} alt={hotel.hotelName} width={61} height={61} className="rounded-[8px]" />
+              {/* put conditionals for if image is available */}
+              {/* map through the image if available */}
+              <div className="flex w-full gap-[8px]">
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+              </div>
+            </div>
+
+            <div className="singleReview w-full md:w-[calc(50%-10px)] p-[20px] bg-white rounded-[12px]">
+              <div className="imgLine flex justify-between mb-[12px]">
+                <div className="flex gap-[18px] items-center">
+                  <Image
+                    src={hotel.avatar}
+                    alt="hotel.hotelName"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  <p className="text-[14px] tracking-[0.1px] font-medium ">
+                    {hotel.hotelName}
+                  </p>
                 </div>
+
+                <p className="text-[darkGreen] flex items-center gap-[8px]">
+                  {hotel.rating} <Star />
+                </p>
+              </div>
+
+              <p className="mb-[12px] text-[#5F5F5F] text-[12px]">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga
+                enim magni nihil incidunt animi obcaecati harum dolorem
+                voluptatum hic vel, ipsa laboriosam vitae quia ad aut ratione?
+                Eius, omnis itaque.
+              </p>
+
+              {/* put conditionals for if image is available */}
+              {/* map through the image if available */}
+              <div className="flex w-full gap-[8px]">
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+              </div>
+            </div>
+
+            <div className="singleReview w-full md:w-[calc(50%-10px)] p-[20px] bg-white rounded-[12px]">
+              <div className="imgLine flex justify-between mb-[12px]">
+                <div className="flex gap-[18px] items-center">
+                  <Image
+                    src={hotel.avatar}
+                    alt="hotel.hotelName"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  <p className="text-[14px] tracking-[0.1px] font-medium ">
+                    {hotel.hotelName}
+                  </p>
+                </div>
+
+                <p className="text-[darkGreen] flex items-center gap-[8px]">
+                  {hotel.rating} <Star />
+                </p>
+              </div>
+
+              <p className="mb-[12px] text-[#5F5F5F] text-[12px]">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga
+                enim magni nihil incidunt animi obcaecati harum dolorem
+                voluptatum hic vel, ipsa laboriosam vitae quia ad aut ratione?
+                Eius, omnis itaque.
+              </p>
+
+              {/* put conditionals for if image is available */}
+              {/* map through the image if available */}
+              <div className="flex w-full gap-[8px]">
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+              </div>
+            </div>
+
+            <div className="singleReview w-full md:w-[calc(50%-10px)] p-[20px] bg-white rounded-[12px]">
+              <div className="imgLine flex justify-between mb-[12px]">
+                <div className="flex gap-[18px] items-center">
+                  <Image
+                    src={hotel.avatar}
+                    alt="hotel.hotelName"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  <p className="text-[14px] tracking-[0.1px] font-medium ">
+                    {hotel.hotelName}
+                  </p>
+                </div>
+
+                <p className="text-[darkGreen] flex items-center gap-[8px]">
+                  {hotel.rating} <Star />
+                </p>
+              </div>
+
+              <p className="mb-[12px] text-[#5F5F5F] text-[12px]">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga
+                enim magni nihil incidunt animi obcaecati harum dolorem
+                voluptatum hic vel, ipsa laboriosam vitae quia ad aut ratione?
+                Eius, omnis itaque.
+              </p>
+
+              {/* put conditionals for if image is available */}
+              {/* map through the image if available */}
+              <div className="flex w-full gap-[8px]">
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+                <Image
+                  src={hotel.avatar}
+                  alt={hotel.hotelName}
+                  width={61}
+                  height={61}
+                  className="rounded-[8px]"
+                />
+              </div>
             </div>
           </div>
         </div>
