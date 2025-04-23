@@ -109,7 +109,11 @@ export default function Hotel() {
 
       {/* second half */}
       <div className="secondHalf flex justify-center w-full lg:w-1/3">
-       <BookingForm />
+       <BookingForm 
+       foodImg={hotel.avatar}
+       foodName={hotel.hotelName}
+       price={hotel.price}
+       />
       </div>
     </div>
   );
