@@ -2,23 +2,24 @@ import { Calendar } from "../calendar";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Button } from "../button";
+import { Separator } from "../separator";
 
 export default function BookingForm() {
   const mealTimes = [
     {
       id: 1,
       mealType: "Breakfast",
-      time: ["7:00am", "8:00am", "9:00am"],
+      time: ["7:00 AM", "8:00 AM", "9:00 AM", "7:00 AM", "8:00 AM", "9:00 AM"],
     },
     {
       id: 2,
       mealType: "Lunch",
-      time: ["12:00pm", "1:00pm", "2:00pm"],
+      time: ["12:00 PM", "1:00 PM", "2:00 PM"],
     },
     {
       id: 3,
       mealType: "Dinner",
-      time: ["6:00pm", "7:00pm", "9:00pm"],
+      time: ["6:00 PM", "7:00 PM", "9:00 PM"],
     },
   ];
 
@@ -29,15 +30,15 @@ export default function BookingForm() {
   } | null>(null);
 
   const [datePicked, setDatePicked] = useState<string | undefined>();
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
 
   const timeClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const clicked = e.currentTarget.value;
     const selectedMeal = mealTimes.find((meal) => meal.mealType === clicked);
     if (selectedMeal) {
       setMealSelect(selectedMeal);
+      setSelectedTime(clicked);
     }
-    //console.log(mealSelect);
-    //console.log(mealTimes)
   };
 
   useEffect(() => {
@@ -75,30 +76,39 @@ export default function BookingForm() {
 
         <div className="flex flex-col w-full bg-white rounded-[16px] p-[20px] gap-4">
           {/* Row for meal types */}
-          <div className="flex gap-2 justify-between">
+          <div className="flex gap-0 justify-between">
             {mealTimes.map((meal, id) => (
-              <Button
+              <div className="flex flex-col w-1/3" key={id}>
+                <Button
                 variant="ghost"
-                key={id}
-                className="text-[darkGreen] text-[12px]"
+                className="flex justify-center  text-[darkGreen] text-[12px]"
                 onClick={timeClickHandler}
                 value={meal.mealType}
               >
                 {meal.mealType}
               </Button>
+
+              <Separator  className={`border-[2px] w-full border-[darkGreen]/40 ${
+                selectedTime === meal.mealType ? "border-[darkGreen]" : "border-[darkGreen]/40"}`}/>
+              </div>
+              
             ))}
           </div>
 
           {/* Row for times under selected meal */}
           {mealSelect && (
-            <div className="flex gap-[12px] flex-wrap">
+            <div className="flex justify-start items-center gap-[12px] flex-wrap">
               {mealSelect.time.map((t, index) => (
-                <div
+                <Button
+                value={t}
+                onClick={() => console.log(t)}
+                variant="outline"
                   key={index}
-                  className="bg-green-100 text-darkGreen px-3 py-1 rounded-md text-sm"
+                  className="border-[darkGreen]  text-[12px] text-[darkGreen] p-[12px] gap-[10px] rounded-md text-sm"
                 >
                   {t}
-                </div>
+                </Button>
+
               ))}
             </div>
           )}
