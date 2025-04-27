@@ -4,13 +4,21 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "../calendar";
+import GuestSelect from "./GuestSelect";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Button } from "../button";
 import { Separator } from "../separator";
 import Image from "next/image";
 import { SquareMinusIcon, SquarePlusIcon } from "lucide-react";
-import { Form, FormLabel, FormField, FormItem, FormControl, FormMessage } from "../form";
+import {
+  Form,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "../form";
 import { Input } from "../input";
 
 // Props type
@@ -23,8 +31,8 @@ type BookingFormProps = {
 // Schema
 export const bookingSchema = z.object({
   calendar: z.string().min(1, "Please select a date"),
-  fullName: z.string().min(1, "Full name is required"),
-  email: z.string().email("Enter a valid email address"),
+  guestName: z.string().min(1, "Full name is required"),
+  guestNumber: z.number().min(1, "Select number of guests"),
   phoneNumber: z.string().regex(/^\+?\d{7,14}$/, "Enter a valid phone number"),
 });
 
@@ -64,13 +72,14 @@ export default function BookingForm({
   const [mealCount, setMealCount] = useState(0);
   const [timeClicked, setTimeClicked] = useState<string | null>(null);
   const [timeSlotWarning, setTimeSlotWarning] = useState<string | null>(null);
+  const [mealCountWarning, setMealCountWarning] = useState<string | null>(null);
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       calendar: "",
-      fullName: "",
-      email: "",
+      guestName: "",
+      guestNumber: 2,
       phoneNumber: "",
     },
   });
@@ -80,14 +89,13 @@ export default function BookingForm({
   const handleMealMinus = () =>
     setMealCount((prev) => (prev > 0 ? prev - 1 : 0));
 
-
   // handles UI change for the option clicked (breakfast, lunch or dinner)
   const timeClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const clicked = e.currentTarget.value;
     const selectedMeal = mealTimes.find((meal) => meal.mealType === clicked);
     if (selectedMeal) {
       setMealSelect(selectedMeal);
-      setSelectedTime(clicked);
+      setSelectedTime(clicked); // for UI change when the button is clicked
     }
   };
 
@@ -97,20 +105,39 @@ export default function BookingForm({
     setTimeSlotWarning(null);
   };
 
-  // handles the preselected instance of the meal 
+  // handles the preselected instance of the meal
   useEffect(() => {
     const preSelected = mealTimes.find((m) => m.mealType === "Breakfast");
     if (preSelected) {
+      setSelectedTime("Breakfast");
       setMealSelect(preSelected);
-      setSelectedTime("Breakfast"); 
     }
   }, []);
 
   const totalCost = price * mealCount;
 
+  const resetForm = () => {
+    form.reset();
+
+    setMealCount(0);
+    setMealSelect(null);
+    setSelectedTime(null);
+    setTimeClicked(null);
+
+    const preSelected = mealTimes.find((m) => m.mealType === "Breakfast");
+    if (preSelected) {
+      setSelectedTime("Breakfast");
+      setMealSelect(preSelected);
+    }
+  };
+
   const onSubmit = (data: BookingFormValues) => {
-    if(!timeClicked) {
-      setTimeSlotWarning("Please select a time")
+    if (mealCount === 0) {
+      setMealCountWarning("Please select a meal or more");
+      return;
+    }
+    if (!timeClicked) {
+      setTimeSlotWarning("Please select a time");
       return; //check time validity later such that you wonrt be able to apply for time has passed
     }
     console.log({
@@ -119,17 +146,18 @@ export default function BookingForm({
       timeClicked,
       mealCount,
       totalCost,
-
-      // clear the form after submission
     });
-    setTimeSlotWarning(null);
+
+    resetForm();
   };
 
+
+  //the booking form needs to be optimized for tablet screen 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col md:flex-row lg:flex-col w-full gap-[24px]"
+        className="flex flex-col md:flex-row flex-wrap md:justify-center lg:justify-normal lg:flex-col w-full gap-[24px]"
       >
         {/* Calendar */}
         <FormField
@@ -138,26 +166,28 @@ export default function BookingForm({
           render={({ field }) => (
             <div className="calendar flex flex-col gap-[16px]">
               <h2 className="text-[22px] text-[darkGreen]">Choose Date</h2>
-              <Calendar
-                mode="single"
-                selected={field.value ? new Date(field.value) : undefined}
-                onSelect={(date) => {
-                  if (date) {
-                    const formatted = format(date, "yyyy-MM-dd");
-                    field.onChange(formatted);
-                  }
-                }}
-                modifiersStyles={{
-                  selected: {
-                    backgroundColor: "#004225",
-                    color: "white",
-                  },
-                }}
-                className="bg-white flex justify-center text-[darkGreen] rounded-[16px]"
-              />
+              <div className="bg-white flex justify-center text-[darkGreen] rounded-[16px]">
+                <Calendar
+                  mode="single"
+                  selected={field.value ? new Date(field.value) : undefined}
+                  onSelect={(date) => {
+                    if (date) {
+                      const formatted = format(date, "yyyy-MM-dd");
+                      field.onChange(formatted);
+                    }
+                  }}
+                  modifiersStyles={{
+                    selected: {
+                      backgroundColor: "#004225",
+                      color: "white",
+                    },
+                  }}
+                  className="bg-white flex justify-center text-[darkGreen] rounded-[16px]"
+                />
+              </div>
+              <FormMessage className="text-red-500" />
             </div>
           )}
-          
         />
 
         {/* Time Slots */}
@@ -187,27 +217,25 @@ export default function BookingForm({
               ))}
             </div>
 
-            {mealSelect && (
-              <div className="flex justify-start items-center gap-[12px] flex-wrap">
-                {mealSelect.time.map((t, index) => (
-                  <Button
-                    key={index}
-                    value={t}
-                    onClick={timeSlotHandler}
-                    variant="outline"
-                    className={`border-[darkGreen] text-[12px] text-[darkGreen] p-[12px] gap-[10px] rounded-md ${
-                      timeClicked === t ? "bg-[darkGreen] text-white" : "bg-none"
-                    }`}
-                    type="button"
-                  >
-                    {t}
-                  </Button>
-                ))}
-              </div>
-            )}
+            <div className="flex justify-start items-center gap-[12px] flex-wrap">
+              {mealSelect?.time.map((t, index) => (
+                <Button
+                  key={index}
+                  value={t}
+                  onClick={timeSlotHandler}
+                  variant="outline"
+                  className={`border-[darkGreen] text-[12px] text-[darkGreen] p-[12px] gap-[10px] rounded-md ${
+                    timeClicked === t ? "bg-[darkGreen] text-white" : "bg-none"
+                  }`}
+                  type="button"
+                >
+                  {t}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
-       {timeSlotWarning && ( <p className="text-red-500">{timeSlotWarning}</p>)}
+        {timeSlotWarning && <p className="text-red-500">{timeSlotWarning}</p>}
 
         {/* Food Chosen */}
         <div className="flex flex-col gap-[16px]">
@@ -246,67 +274,70 @@ export default function BookingForm({
               <p>${totalCost}</p>
             </div>
           </div>
+          {!mealCount && <p className="text-red-500">{mealCountWarning}</p>}
         </div>
 
         {/* Booking Details */}
         <div className="bookingDetails flex flex-col gap-[16px]">
           <h2 className="text-[22px] text-[darkGreen]">Booking details</h2>
           <div className="details flex flex-col bg-white rounded-[16px] p-[20px] gap-[20px]">
+            {/*choose number of guests  */}
             <FormField
               control={form.control}
-              name="fullName"
+              name="guestNumber"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[darkGreen]">Full Name</FormLabel>
+                <FormItem className="flex flex-col gap-[12px]">
+                  <FormLabel className="text-[darkGreen]">
+                    Choose number of guest:
+                  </FormLabel>
+                  <FormControl>
+                    <GuestSelect {...field} />
+                  </FormControl>
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
+            />
+
+            {/* guest name */}
+            <FormField
+              control={form.control}
+              name="guestName"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-[12px]">
+                  <FormLabel className="text-[darkGreen]">
+                    Enter guest name:
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type="text"
-                      placeholder="Enter your full name"
+                      placeholder="Name for person who is booking."
                       className="border-[darkGreen]/50 text-[darkGreen] rounded-[8px]"
                     />
                   </FormControl>
-                  <FormMessage className="text-red-500"/>
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[darkGreen]">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder="example@mail.com"
-                      className="border-[darkGreen]/50 text-[darkGreen] rounded-[8px]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-500"/>
-                </FormItem>
-              )}
-            />
-
+            {/* mobile number */}
             <FormField
               control={form.control}
               name="phoneNumber"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col gap-[12px]">
                   <FormLabel className="text-[darkGreen]">
-                    Phone Number
+                    Enter Phone detail
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type="tel"
-                      placeholder="+234 000 000 0000"
+                      placeholder="+234 000 000 000"
                       className="border-[darkGreen]/50 text-[darkGreen] rounded-[8px]"
                     />
                   </FormControl>
-                  <FormMessage className="text-red-500"/>
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -314,7 +345,7 @@ export default function BookingForm({
         </div>
 
         {/* Submit */}
-        <Button type="submit" className="self-start bg-[darkGreen] text-white">
+        <Button type="submit" className="w-full h-[56px] bg-[darkGreen] text-white">
           Book Now
         </Button>
       </form>
