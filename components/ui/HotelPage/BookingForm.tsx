@@ -20,6 +20,9 @@ import {
   FormMessage,
 } from "../form";
 import { Input } from "../input";
+import { useParams } from "next/navigation";
+
+const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
 
 // Props type
 type BookingFormProps = {
@@ -30,7 +33,7 @@ type BookingFormProps = {
 
 // Schema
 export const bookingSchema = z.object({
-  calendar: z.string().min(1, "Please select a date"),
+  bookedDate: z.string().min(1, "Please select a date"),
   guestName: z.string().min(1, "Full name is required"),
   guestNumber: z.number().min(1, "Select number of guests"),
   phoneNumber: z.string().regex(/^\+?\d{7,14}$/, "Enter a valid phone number"),
@@ -64,6 +67,7 @@ export default function BookingForm({
 
   const [mealSelect, setMealSelect] = useState<{
     id: number;
+
     mealType: string;
     time: string[];
   } | null>(null);
@@ -73,11 +77,12 @@ export default function BookingForm({
   const [timeClicked, setTimeClicked] = useState<string | null>(null);
   const [timeSlotWarning, setTimeSlotWarning] = useState<string | null>(null);
   const [mealCountWarning, setMealCountWarning] = useState<string | null>(null);
+  const { id } = useParams();
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
-      calendar: "",
+      bookedDate: "",
       guestName: "",
       guestNumber: 2,
       phoneNumber: "",
@@ -131,28 +136,53 @@ export default function BookingForm({
     }
   };
 
-  const onSubmit = (data: BookingFormValues) => {
+  const onSubmit = async (data: BookingFormValues) => {
     if (mealCount === 0) {
       setMealCountWarning("Please select a meal or more");
       return;
     }
     if (!timeClicked) {
       setTimeSlotWarning("Please select a time");
-      return; //check time validity later such that you wonrt be able to apply for time has passed
+      return;
     }
-    console.log({
+
+    //payload should contain mealID and mealName
+    const payload = {
       ...data,
+      hotelID: id,
       selectedMeal: mealSelect?.mealType,
       timeClicked,
       mealCount,
       totalCost,
-    });
+    };
+    console.log("Booking data:", payload);
+    console.log("API URL:", postMockAPI);
 
-    resetForm();
+    try {
+      const response = await fetch(postMockAPI, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit booking");
+      }
+
+      const result = await response.json();
+      console.log("Booking successful:", result);
+
+      // Optionally reset the form after successful submission
+      resetForm();
+    } catch (error) {
+      console.error("Error submitting booking:", error);
+      // Optionally display an error message to the user
+    }
   };
 
-
-  //the booking form needs to be optimized for tablet screen 
+  //the booking form needs to be optimized for tablet screen
   return (
     <Form {...form}>
       <form
@@ -162,7 +192,7 @@ export default function BookingForm({
         {/* Calendar */}
         <FormField
           control={form.control}
-          name="calendar"
+          name="bookedDate"
           render={({ field }) => (
             <div className="calendar flex flex-col gap-[16px]">
               <h2 className="text-[22px] text-[darkGreen]">Choose Date</h2>
@@ -345,7 +375,10 @@ export default function BookingForm({
         </div>
 
         {/* Submit */}
-        <Button type="submit" className="w-full h-[56px] bg-[darkGreen] text-white">
+        <Button
+          type="submit"
+          className="w-full h-[56px] bg-[darkGreen] text-white"
+        >
           Book Now
         </Button>
       </form>

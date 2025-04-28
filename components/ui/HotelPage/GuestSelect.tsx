@@ -14,7 +14,7 @@ type GuestSelectProps = {
     onChange: (value: number) => void;
     onBlur?: () => void;
     name?: string;
-    ref?: ForwardedRef<any>;
+    ref?: ForwardedRef<never>;
     disabled?: boolean;
   };
   
