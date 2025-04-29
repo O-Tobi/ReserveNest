@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         await connectDB();
         const data = await request.json();
 
-        if (!data) {
+        if (!data || !data.selectedMeal || data.selectedMeal.length === 0) {
             return new NextResponse(JSON.stringify({ error: "Invalid input data" }), { status: 400 });
         }
 

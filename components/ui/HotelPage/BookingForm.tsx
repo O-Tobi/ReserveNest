@@ -21,8 +21,9 @@ import {
 } from "../form";
 import { Input } from "../input";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
+//const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
 
 // Props type
 type BookingFormProps = {
@@ -36,7 +37,7 @@ export const bookingSchema = z.object({
   bookedDate: z.string().min(1, "Please select a date"),
   guestName: z.string().min(1, "Full name is required"),
   guestNumber: z.number().min(1, "Select number of guests"),
-  phoneNumber: z.string().regex(/^\+?\d{7,14}$/, "Enter a valid phone number"),
+  phoneNumber: z.string().regex(/^\+?\d{10}$/, "Enter a valid phone number"),
 });
 
 // Infer values from schema
@@ -78,6 +79,7 @@ export default function BookingForm({
   const [timeSlotWarning, setTimeSlotWarning] = useState<string | null>(null);
   const [mealCountWarning, setMealCountWarning] = useState<string | null>(null);
   const { id } = useParams();
+  const {data: session} = useSession();
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -149,17 +151,24 @@ export default function BookingForm({
     //payload should contain mealID and mealName
     const payload = {
       ...data,
-      hotelID: id,
-      selectedMeal: mealSelect?.mealType,
+      restaurantID: id,
+      selectedMeal: [
+        {
+          mealID: mealSelect?.id,
+          mealName: foodName,
+          mealType: mealSelect?.mealType,
+          mealCount: mealCount,
+          totalCost: totalCost,
+        }
+      ],
       timeClicked,
-      mealCount,
-      totalCost,
+      user: session?.user?.email
     };
-    console.log("Booking data:", payload);
-    console.log("API URL:", postMockAPI);
+     console.log("Booking data:", payload);
+    // console.log("API URL:", postMockAPI);
 
     try {
-      const response = await fetch(postMockAPI, {
+      const response = await fetch("/api/booking", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
