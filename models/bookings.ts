@@ -14,7 +14,8 @@ export interface IBooking extends Document {
   }[];
   guestName: string;
   phoneNumber: string;
-  timeClicked: string; 
+  timeClicked: string;
+  additionalInfo?: string; 
 }
 
 const BookingSchema = new Schema<IBooking>({
@@ -33,6 +34,7 @@ const BookingSchema = new Schema<IBooking>({
   guestName: { type: String, required: true },
   phoneNumber: { type: String, required: true, match: /^[0-9]{10}$/ }, // Assuming a 14-digit phone number
   timeClicked: {type: String, required: true}, // Assuming this is a string, adjust as necessary
+  additionalInfo: { type: String },
 });
 
 export default mongoose.models.Booking || mongoose.model<IBooking>("Booking", BookingSchema);

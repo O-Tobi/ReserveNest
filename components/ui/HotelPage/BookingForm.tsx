@@ -22,6 +22,9 @@ import {
 import { Input } from "../input";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import BookingAlertDialog from "./BookingAlertDialog";
+import DialogTestes from "./DialogTestes";
+
 
 //const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
 
@@ -80,6 +83,7 @@ export default function BookingForm({
   const [mealCountWarning, setMealCountWarning] = useState<string | null>(null);
   const { id } = useParams();
   const {data: session} = useSession();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -187,8 +191,9 @@ export default function BookingForm({
       resetForm();
     } catch (error) {
       console.error("Error submitting booking:", error);
-      // Optionally display an error message to the user
+      // Optionally display an error message to the user 
     }
+    setDrawerOpen(true);
   };
 
   //the booking form needs to be optimized for tablet screen
@@ -390,6 +395,8 @@ export default function BookingForm({
         >
           Book Now
         </Button>
+        <BookingAlertDialog triggerOpen={drawerOpen} setTriggerOpen={setDrawerOpen}  />
+        <DialogTestes />
       </form>
     </Form>
   );
