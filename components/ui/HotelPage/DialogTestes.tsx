@@ -1,7 +1,6 @@
 import { Button } from "../button";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -102,16 +101,45 @@ export default function DialogTestes() {
     <Drawer>
       <DrawerTrigger>Open</DrawerTrigger>
 
-      <DrawerContent className="bg-red-500  h-full flex flex-col justify-center items-center ">
-        <DrawerHeader className="bg-blue-500">
-          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+      <DrawerContent className="bg-white  px-[10px] h-full ">
+        <DrawerHeader className="flex w-full justify-center items-center  gap-[8px]">
+          <div className="checkmark flex justify-center items-center bg-[#23A26D]/12 rounded-full w-[80px] h-[80px]">
+            <div className="inner flex items-center justify-center h-[46px] w-[46px] rounded-full bg-[#23A26D] text-white">
+              <Check className="h-8 w-8" />
+            </div>
+          </div>
+          <div className="flex flex-col justify-center items-center">
+            <DrawerTitle>Booking Confirmed !!</DrawerTitle>
+            <DrawerDescription>Booking ID: 123456</DrawerDescription>
+          </div>
         </DrawerHeader>
+
+        {/* <Separator className="border-[.4px] border-[#C5C5C5]/40 w-full" /> */}
+
+        <DrawerDescription>
+          <div className="flex flex-col justify-center items-center gap-[5px]">
+            <p className="hotelName text-[18px] font-medium">
+              Colours by Royal Cafe
+            </p>
+            <p className="address">
+              3rd Floor, Royal Inn, 9/7, Opposite SaharaGanj Mall, Shahnajaf
+              Road, Hazratganj, Lucknow
+            </p>
+            
+          </div>
+        </DrawerDescription>
+
         <DrawerFooter>
-          <Button>Submit</Button>
-          <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
+          <div className="flex flex-row gap-[10px] pb-[10px]">
+            <Button className="bg-[#006FD5] p-[px]  w-1/2  text-white text-[14px] font-medium rounded-[8px]">
+              <ClipboardList/> View Menu
+            </Button>{" "}
+         
+              <Button className="bg-[#BA1717] p-[px]  w-1/2 text-white text-[14px] font-medium rounded-[8px]">
+               <CircleX />  Cancel Booking
+              </Button>{" "}
+            
+          </div>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
