@@ -7,6 +7,7 @@ import {
   DrawerTitle,
   DrawerHeader,
   DrawerTrigger,
+  DrawerClose,
 } from "../drawer";
 
 import {
@@ -16,7 +17,9 @@ import {
   DialogTitle,
   DialogDescription,
   DialogHeader,
+  DialogClose,
 } from "../dialog";
+
 import {
   CalendarDays,
   Check,
@@ -26,6 +29,18 @@ import {
   UsersRound,
 } from "lucide-react";
 import { Separator } from "../separator";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../alert-dialog";
 
 export default function DialogTestes() {
   const isDesktop = window.innerWidth >= 760;
@@ -87,9 +102,34 @@ export default function DialogTestes() {
               <Button className="bg-[#006FD5] p-[12px] gap-[10px] h-[54px] w-1/2  text-white text-[14px] font-medium rounded-[8px]">
                 <ClipboardList /> View Menu
               </Button>
-              <Button className="bg-[#BA1717] p-[12px] gap-[10px] h-[54px] w-1/2 text-white text-[14px] font-medium rounded-[8px]">
-                <CircleX /> Cancel Booking
-              </Button>
+
+              {/* the cancel booking button will render an alert dialogbox for confirmation */}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="bg-[#BA1717] p-[12px] gap-[10px] h-[54px] w-1/2 text-white text-[14px] font-medium rounded-[8px]">
+                    <CircleX /> Cancel Booking
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      all selected menus
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>
+                      <DialogClose>
+                        Continue
+                      </DialogClose>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </DialogDescription>
         </DialogContent>
@@ -101,7 +141,7 @@ export default function DialogTestes() {
     <Drawer>
       <DrawerTrigger>Open</DrawerTrigger>
 
-      <DrawerContent className="bg-white  px-[10px] h-full ">
+      <DrawerContent className="bg-white flex gap-[10px] px-[10px] ">
         <DrawerHeader className="flex w-full justify-center items-center  gap-[8px]">
           <div className="checkmark flex justify-center items-center bg-[#23A26D]/12 rounded-full w-[80px] h-[80px]">
             <div className="inner flex items-center justify-center h-[46px] w-[46px] rounded-full bg-[#23A26D] text-white">
@@ -121,24 +161,60 @@ export default function DialogTestes() {
             <p className="hotelName text-[18px] font-medium">
               Colours by Royal Cafe
             </p>
-            <p className="address">
+            <p className="address text-center">
               3rd Floor, Royal Inn, 9/7, Opposite SaharaGanj Mall, Shahnajaf
               Road, Hazratganj, Lucknow
             </p>
-            
+          </div>
+        </DrawerDescription>
+
+        <DrawerDescription>
+          <div className="infoTab flex flex-row gap-[10px] justify-between items-center">
+            <div className="flex w-full flex-col justify center items-center gap-[10px] px-[10px] py-[10px] rounded-[8px] border-[0.5px] border-[#C5C5C5]/40">
+              <CalendarDays />
+              <p>19 Jan 2025</p>
+            </div>
+
+            <div className="flex w-full flex-col justify center items-center gap-[10px] px-[10px] py-[10px] rounded-[8px] border-[0.5px] border-[#C5C5C5]/40">
+              <Clock4 />
+              <p>9:00 PM</p>
+            </div>
+
+            <div className="flex w-full flex-col justify center items-center gap-[10px] px-[10px] py-[10px] rounded-[8px] border-[0.5px] border-[#C5C5C5]/40">
+              <UsersRound />
+              <p>2 Guests</p>
+            </div>
           </div>
         </DrawerDescription>
 
         <DrawerFooter>
           <div className="flex flex-row gap-[10px] pb-[10px]">
             <Button className="bg-[#006FD5] p-[px]  w-1/2  text-white text-[14px] font-medium rounded-[8px]">
-              <ClipboardList/> View Menu
-            </Button>{" "}
-         
-              <Button className="bg-[#BA1717] p-[px]  w-1/2 text-white text-[14px] font-medium rounded-[8px]">
-               <CircleX />  Cancel Booking
-              </Button>{" "}
-            
+              <ClipboardList /> View Menu
+            </Button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="bg-[#BA1717] p-[px]  w-1/2 text-white text-[14px] font-medium rounded-[8px]">
+                  <CircleX /> Cancel Booking
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="bg-white flex flex-col 2">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    all selected menus
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction>
+                    <DrawerClose>Continue</DrawerClose>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </DrawerFooter>
       </DrawerContent>
