@@ -25,6 +25,7 @@ import { useSession } from "next-auth/react";
 import BookingAlert from "./BookingAlert";
 import getMockData from "@/lib/data";
 import generateBookingCode from "@/lib/generateBookingCode";
+import { checkCodeExists } from "@/lib/checkCodeExists";
 //import { set } from "mongoose";
 
 //const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
@@ -196,7 +197,15 @@ export default function BookingForm({
       setTimeSlotWarning("Please select a time");
       return;
     }
-    const code = generateBookingCode();
+
+    let code = generateBookingCode();
+    let codeExists = await checkCodeExists(code);
+
+    while (codeExists) {
+       code = generateBookingCode();
+       codeExists = await checkCodeExists(code);
+    }
+    
     //payload should contain mealID and mealName
     const payload: BookingDetailsProps = {
       ...data,
