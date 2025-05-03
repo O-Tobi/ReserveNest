@@ -22,9 +22,8 @@ import {
 import { Input } from "../input";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import BookingAlertDialog from "./BookingAlertDialog";
-import DialogTestes from "./DialogTestes";
-
+import BookingAlert from "./BookingAlert";
+import getMockData from "@/lib/data";
 
 //const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
 
@@ -33,6 +32,38 @@ type BookingFormProps = {
   foodImg: string;
   foodName: string;
   price: number;
+};
+
+type Restaurant = {
+  id: string;
+  avatar: string;
+  hotelName: string;
+  location: string;
+  price: number;
+  rating: number;
+  image: string;
+};
+
+type DataProps = {
+  bookedDate: string;
+  guestName: string;
+  guestNumber: number;
+  phoneNumber: string;
+};
+
+type SelectedMealTypeProps = {
+  mealID?: number;
+  mealName: string;
+  mealType?: string;
+  mealCount: number;
+  totalCost: number;
+};
+
+type BookingDetailsProps = DataProps & {
+  restaurantID: number;
+  selectedMeal: SelectedMealTypeProps[];
+  timeClicked: string;
+  user?: string | null;
 };
 
 // Schema
@@ -71,7 +102,6 @@ export default function BookingForm({
 
   const [mealSelect, setMealSelect] = useState<{
     id: number;
-
     mealType: string;
     time: string[];
   } | null>(null);
@@ -82,8 +112,12 @@ export default function BookingForm({
   const [timeSlotWarning, setTimeSlotWarning] = useState<string | null>(null);
   const [mealCountWarning, setMealCountWarning] = useState<string | null>(null);
   const { id } = useParams();
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [restaurant, setRestaurant] = useState<Restaurant | null>(null); //get information about the restaurant for the booking alert
+  const [bookingData, setBookingData] = useState<BookingDetailsProps | null>(
+    null
+  ); //get information about the booking for the booking alert
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -118,6 +152,14 @@ export default function BookingForm({
 
   // handles the preselected instance of the meal
   useEffect(() => {
+    const fetchData = async () => {
+      const allRestaurant = await getMockData("hotels");
+      const current = allRestaurant.find((res: Restaurant) => res.id === id) || null;
+      setRestaurant(current || null);
+      console.log("Restaurant data:", current);
+    };
+    fetchData();
+
     const preSelected = mealTimes.find((m) => m.mealType === "Breakfast");
     if (preSelected) {
       setSelectedTime("Breakfast");
@@ -153,9 +195,9 @@ export default function BookingForm({
     }
 
     //payload should contain mealID and mealName
-    const payload = {
+    const payload: BookingDetailsProps = {
       ...data,
-      restaurantID: id,
+      restaurantID: Number(id),
       selectedMeal: [
         {
           mealID: mealSelect?.id,
@@ -163,12 +205,14 @@ export default function BookingForm({
           mealType: mealSelect?.mealType,
           mealCount: mealCount,
           totalCost: totalCost,
-        }
+        },
       ],
       timeClicked,
-      user: session?.user?.email
+      user: session?.user?.email,
     };
-     console.log("Booking data:", payload);
+    //const payloadData = [payload]
+    setBookingData(payload);
+    console.log("Booking data:", payload);
     // console.log("API URL:", postMockAPI);
 
     try {
@@ -187,11 +231,9 @@ export default function BookingForm({
       const result = await response.json();
       console.log("Booking successful:", result);
 
-      // Optionally reset the form after successful submission
       resetForm();
     } catch (error) {
       console.error("Error submitting booking:", error);
-      // Optionally display an error message to the user 
     }
     setDrawerOpen(true);
   };
@@ -393,10 +435,19 @@ export default function BookingForm({
           type="submit"
           className="w-full h-[56px] bg-[darkGreen] text-white"
         >
-          Book Now
+          Book Now 
         </Button>
-        <BookingAlertDialog triggerOpen={drawerOpen} setTriggerOpen={setDrawerOpen}  />
-        <DialogTestes />
+
+        <BookingAlert
+          // use params to get the restaurantID, name and address
+          restaurantName={restaurant?.hotelName ?? ""}
+          bookingDate={bookingData?.bookedDate ?? ""}
+          bookingTime={bookingData?.timeClicked ?? ""}
+          guestNumber={bookingData?.guestNumber ?? 0}
+          restaurantAddress={restaurant?.location ?? "Address not available"}
+          triggerOpen={drawerOpen}
+          setTriggerOpen={setDrawerOpen}
+        />
       </form>
     </Form>
   );

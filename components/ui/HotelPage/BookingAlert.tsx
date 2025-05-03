@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "../button";
 import {
   Drawer,
@@ -44,11 +43,21 @@ import {
 type BookingAlertProps = {
   triggerOpen: boolean;
   setTriggerOpen: (open: boolean) => void;
+  restaurantName: string;
+  bookingDate: string;
+  bookingTime: string;
+  guestNumber: number;
+  restaurantAddress: string;
 };
 
 export default function BookingAlert({
   triggerOpen,
   setTriggerOpen,
+  restaurantName,
+  bookingDate,
+  bookingTime,
+  guestNumber,
+  restaurantAddress,
 }: BookingAlertProps) {
   // This component is used to show the booking alert dialog box when the user clicks on the book table button
   const isDesktop = window.innerWidth >= 760;
@@ -64,21 +73,19 @@ export default function BookingAlert({
               </div>
             </div>
             <div className="flex flex-col justify-center items-center gap-[12px]">
-              <DialogTitle>Booking Confirmed !!</DialogTitle>
+              <DialogTitle>Booking Confirmed !!!</DialogTitle>
               <DialogDescription>Booking ID: 123456</DialogDescription>
             </div>
           </DialogHeader>
 
           <Separator className="border-[.4px] border-[#C5C5C5]/40 w-full" />
-
           <DialogDescription>
             <div className="flex flex-col justify-center items-center gap-[14px]">
               <p className="hotelName text-[28px] font-medium">
-                Colours by Royal Cafe
+                {restaurantName}
               </p>
               <p className="address">
-                3rd Floor, Royal Inn, 9/7, Opposite SaharaGanj Mall, Shahnajaf
-                Road, Hazratganj, Lucknow
+                {restaurantAddress}
               </p>
             </div>
           </DialogDescription>
@@ -87,17 +94,17 @@ export default function BookingAlert({
             <div className="infoTab flex flex-row gap-[24px] justify-between items-center">
               <div className="flex w-full flex-col justify center items-center gap-[16px] px-[16px] py-[20px] rounded-[8px] border-[0.5px] border-[#C5C5C5]/40">
                 <CalendarDays />
-                <p>19 Jan 2025</p>
+                <p>{bookingDate}</p>
               </div>
 
               <div className="flex w-full flex-col justify center items-center gap-[16px] px-[16px] py-[20px] rounded-[8px] border-[0.5px] border-[#C5C5C5]/40">
                 <Clock4 />
-                <p>9:00 PM</p>
+                <p>{bookingTime}</p>
               </div>
 
               <div className="flex w-full flex-col justify center items-center gap-[16px] px-[16px] py-[20px] rounded-[8px] border-[0.5px] border-[#C5C5C5]/40">
                 <UsersRound />
-                <p>2 Guests</p>
+                <p>{guestNumber} Guests</p>
               </div>
             </div>
           </DialogDescription>
@@ -128,6 +135,7 @@ export default function BookingAlert({
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction>
+                      {/* write an onClick function that deletes bookings by id */}
                       <DialogClose>Continue</DialogClose>
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -211,6 +219,7 @@ export default function BookingAlert({
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction>
+                    {/* write an onClick function that deletes bookings by id */}
                     <DrawerClose>Continue</DrawerClose>
                   </AlertDialogAction>
                 </AlertDialogFooter>
