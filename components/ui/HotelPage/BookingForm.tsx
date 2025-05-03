@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { Button } from "../button";
 import { Separator } from "../separator";
 import Image from "next/image";
-import { SquareMinusIcon, SquarePlusIcon } from "lucide-react";
+import { LoaderCircle, SquareMinusIcon, SquarePlusIcon } from "lucide-react";
 import {
   Form,
   FormLabel,
@@ -115,9 +115,8 @@ export default function BookingForm({
   const { data: session } = useSession();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null); //get information about the restaurant for the booking alert
-  const [bookingData, setBookingData] = useState<BookingDetailsProps | null>(
-    null
-  ); //get information about the booking for the booking alert
+  const [bookingData, setBookingData] = useState<BookingDetailsProps | null>(null); //get information about the booking for the booking alert
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -216,6 +215,7 @@ export default function BookingForm({
     // console.log("API URL:", postMockAPI);
 
     try {
+      setIsLoading(true);
       const response = await fetch("/api/booking", {
         method: "POST",
         headers: {
@@ -235,6 +235,8 @@ export default function BookingForm({
     } catch (error) {
       console.error("Error submitting booking:", error);
     }
+    setIsLoading(false);
+    // Open the booking alert drawer after successful booking
     setDrawerOpen(true);
   };
 
@@ -430,13 +432,18 @@ export default function BookingForm({
           </div>
         </div>
 
-        {/* Submit */}
+        {/* Submit button renders a loading animation if booking is being processed */}
         <Button
           type="submit"
           className="w-full h-[56px] bg-[darkGreen] text-white"
         >
-          Book Now 
+         {isLoading ? (
+          <div className="flex flex-row jusitify-center items-center gap-2">
+            <p className="text-white/50">Book Now</p> <LoaderCircle className="animate-spin " strokeWidth="2.75"/>
+          </div>
+         ): ("Book Now")}
         </Button>
+
 
         <BookingAlert
           // use params to get the restaurantID, name and address
