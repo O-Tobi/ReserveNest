@@ -48,6 +48,7 @@ type BookingAlertProps = {
   bookingTime: string;
   guestNumber: number;
   restaurantAddress: string;
+  bookingCode: string;
 };
 
 export default function BookingAlert({
@@ -58,6 +59,7 @@ export default function BookingAlert({
   bookingTime,
   guestNumber,
   restaurantAddress,
+  bookingCode
 }: BookingAlertProps) {
   // This component is used to show the booking alert dialog box when the user clicks on the book table button
   const isDesktop = window.innerWidth >= 760;
@@ -74,7 +76,7 @@ export default function BookingAlert({
             </div>
             <div className="flex flex-col justify-center items-center gap-[12px]">
               <DialogTitle>Booking Confirmed !!!</DialogTitle>
-              <DialogDescription>Booking ID: 123456</DialogDescription>
+              <DialogDescription>Booking ID: {bookingCode}</DialogDescription>
             </div>
           </DialogHeader>
 

@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IBooking extends Document {
   user: string; // Reference to User collection
   restaurantID: string; // Reference to Restaurant collection
+  bookingCode: string; 
   bookedDate: string;
   guestNumber: number;
   selectedMeal: { // Array of objects with specific structure
@@ -21,6 +22,7 @@ export interface IBooking extends Document {
 const BookingSchema = new Schema<IBooking>({
   user: { type: String, ref: 'User', required: true }, // Foreign key
   restaurantID: {type: String, required: true}, // to be changed to Foreign key when the restaurant document is available
+  bookingCode : { type: String, required:true, unique: true},
   bookedDate: { type: String, required: true },
   guestNumber: { type: Number, required: true, min: 1 }, // At least 1 guest
   selectedMeal: [{

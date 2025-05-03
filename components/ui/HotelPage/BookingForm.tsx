@@ -24,6 +24,8 @@ import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import BookingAlert from "./BookingAlert";
 import getMockData from "@/lib/data";
+import generateBookingCode from "@/lib/generateBookingCode";
+//import { set } from "mongoose";
 
 //const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
 
@@ -60,6 +62,7 @@ type SelectedMealTypeProps = {
 };
 
 type BookingDetailsProps = DataProps & {
+  bookingCode: string;
   restaurantID: number;
   selectedMeal: SelectedMealTypeProps[];
   timeClicked: string;
@@ -117,6 +120,7 @@ export default function BookingForm({
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null); //get information about the restaurant for the booking alert
   const [bookingData, setBookingData] = useState<BookingDetailsProps | null>(null); //get information about the booking for the booking alert
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false)
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -192,10 +196,11 @@ export default function BookingForm({
       setTimeSlotWarning("Please select a time");
       return;
     }
-
+    const code = generateBookingCode();
     //payload should contain mealID and mealName
     const payload: BookingDetailsProps = {
       ...data,
+      bookingCode: code,
       restaurantID: Number(id),
       selectedMeal: [
         {
@@ -209,11 +214,8 @@ export default function BookingForm({
       timeClicked,
       user: session?.user?.email,
     };
-    //const payloadData = [payload]
-    setBookingData(payload);
-    console.log("Booking data:", payload);
-    // console.log("API URL:", postMockAPI);
-
+  
+    
     try {
       setIsLoading(true);
       const response = await fetch("/api/booking", {
@@ -227,17 +229,25 @@ export default function BookingForm({
       if (!response.ok) {
         throw new Error("Failed to submit booking");
       }
+      
 
       const result = await response.json();
       console.log("Booking successful:", result);
 
+      setBookingData(payload);
+      console.log("Booking data:", payload);
+      setDrawerOpen(true);
+
+
       resetForm();
     } catch (error) {
       console.error("Error submitting booking:", error);
+      setIsError(true);
+      setIsLoading(false);
+      return;
     }
+  
     setIsLoading(false);
-    // Open the booking alert drawer after successful booking
-    setDrawerOpen(true);
   };
 
   //the booking form needs to be optimized for tablet screen
@@ -445,8 +455,10 @@ export default function BookingForm({
         </Button>
 
 
-        <BookingAlert
+        {!isError ? (
+          <BookingAlert
           // use params to get the restaurantID, name and address
+          bookingCode={bookingData?.bookingCode ?? ""}
           restaurantName={restaurant?.hotelName ?? ""}
           bookingDate={bookingData?.bookedDate ?? ""}
           bookingTime={bookingData?.timeClicked ?? ""}
@@ -455,6 +467,10 @@ export default function BookingForm({
           triggerOpen={drawerOpen}
           setTriggerOpen={setDrawerOpen}
         />
+        ) : (
+          // use alert component to show error message
+          <p className="text-red-500 animate-bounce duration-200">Error creating booking, please try again</p>
+        )}
       </form>
     </Form>
   );
