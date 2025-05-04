@@ -26,7 +26,7 @@ const useSearchContext = () => {
   return context;
 };
 
-// ✅ Fixed the naming issue: Changed "searchProvider" to "SearchProvider"
+
 export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {

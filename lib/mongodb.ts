@@ -12,5 +12,4 @@ export async function connectDB() {
         return;
     }
     await mongoose.connect(MONGODB_URI);
-    console.log("Connected to MongoDB with Mongoose");
 }

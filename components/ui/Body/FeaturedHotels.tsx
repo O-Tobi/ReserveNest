@@ -3,9 +3,11 @@
 import getMockData from "@/lib/data";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 
 type Hotel = {
+  id: string;
   avatar: string;
   hotelName: string;
   location: string;
@@ -27,14 +29,16 @@ export default function FeaturedHotels() {
 
   if (!data) return null;
 
+
   return (
+   
     <div className="flex flex-col  gap-[24px]">
       <h2 className="text-center md:px-[12px] md:text-left text-[30px] md:text-[40px] leading-[44px] font-semibold bg-gradient-to-r from-[#00854A] to-[#0CD27B] bg-clip-text text-transparent mb-[26px]">
         Featured Hotels near you
       </h2>
       <div className="flex flex-wrap justify-center items-center gap-[20px]">
-        {data.map((d, id) => (
-          <div key={id}>
+        {data.slice(0, 4).map((d, id) => (
+          <Link href={`hotel/${d.id}`} key={id}>
             <div className="flex flex-col shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-500 bg-white h-full w-[300px] md:w-[280px] rounded-[8px] px-[12px] pt-[12px] pb-[20px]" >
               <Image
                 src={d.avatar}
@@ -62,7 +66,7 @@ export default function FeaturedHotels() {
                 </p>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
