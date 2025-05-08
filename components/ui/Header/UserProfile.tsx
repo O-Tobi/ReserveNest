@@ -73,7 +73,7 @@ export function UserProfile() {
             {session ? (
               <div className="flex items-center gap-[8px]">
                 <LogOut />
-                <span onClick={() => signOut()}>Log out</span>
+                <span onClick={() => signOut()}>Sign out</span>
               </div>
             ) : (
               <div className="flex items-center gap-[8px]">

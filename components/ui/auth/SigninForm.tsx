@@ -26,6 +26,7 @@ import { Separator } from "../separator";
 import { Google } from "../assets/assets";
 import Image from "next/image";
 import Link from "next/link";
+import Signupform from "./SignupForm";
 
 type SwitchProps = {
   triggerOpen: boolean;
@@ -67,7 +68,8 @@ export default function Signinform({triggerOpen, setTriggerOpen}: SwitchProps) {
 
   if(isDesktop) {
    return (
-    <Form {...form}>
+    <div>
+      <Form {...form}>
       <Dialog open={triggerOpen} onOpenChange={setTriggerOpen}>
         <DialogContent className=" bg-white border-none px-[40px] pt-[40px] gap-[16px] w-4/6">
           <DialogHeader className="flex items-center justify-center">
@@ -152,6 +154,9 @@ export default function Signinform({triggerOpen, setTriggerOpen}: SwitchProps) {
         </DialogContent>
       </Dialog>
     </Form>
+
+    <Signupform />
+    </div>
   );
   }
  
