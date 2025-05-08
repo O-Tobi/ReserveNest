@@ -27,6 +27,11 @@ import { Google } from "../assets/assets";
 import Image from "next/image";
 import Link from "next/link";
 
+type SwitchProps = {
+  triggerOpen: boolean;
+  setTriggerOpen: (open: boolean) => void;
+}
+
 type SigninFormProps = {
   email: string;
   password: string;
@@ -39,7 +44,7 @@ export const signinSchema = z.object({
     .min(8, "Password must be at least 8 characters long")
 });
 
-export default function Signinform() {
+export default function Signinform({triggerOpen, setTriggerOpen}: SwitchProps) {
   const isDesktop = window.innerWidth >= 760;
   const [eyeOpen, setEyeOpen] = useState(false);
 
@@ -63,7 +68,7 @@ export default function Signinform() {
   if(isDesktop) {
    return (
     <Form {...form}>
-      <Dialog open={true}>
+      <Dialog open={triggerOpen} onOpenChange={setTriggerOpen}>
         <DialogContent className=" bg-white border-none px-[40px] pt-[40px] gap-[16px] w-4/6">
           <DialogHeader className="flex items-center justify-center">
             <DialogTitle>Nice to see you again!</DialogTitle>
@@ -213,7 +218,7 @@ export default function Signinform() {
                     className="border-none focus:ring-[darkGreen] "
                     autoComplete="current-password"
                   />
-                  <Button onClick={toggleEye} className="absolute right-2 focus:ring-[darkGreen] ">
+                  <Button type="button" onClick={toggleEye} className="absolute right-2 focus:ring-[darkGreen] ">
                     {eyeOpen ? <EyeOff /> : <Eye />}
                   </Button>
                 </div>
