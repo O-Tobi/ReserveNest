@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as z from "zod";
 import {
   Dialog,
@@ -26,7 +26,7 @@ import { Separator } from "../separator";
 import { Google } from "../assets/assets";
 import Image from "next/image";
 import Link from "next/link";
-import Signupform from "./SignupForm";
+//import Signupform from "./SignupForm";
 
 type SwitchProps = {
   triggerOpen: boolean;
@@ -46,8 +46,8 @@ export const signinSchema = z.object({
 });
 
 export default function Signinform({triggerOpen, setTriggerOpen}: SwitchProps) {
-  const isDesktop = window.innerWidth >= 760;
-  const [eyeOpen, setEyeOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  const [eyeOpen, setEyeOpen] = useState<boolean>(false);
 
   const toggleEye = () => {
     setEyeOpen((prev) => !prev);
@@ -60,6 +60,21 @@ export default function Signinform({triggerOpen, setTriggerOpen}: SwitchProps) {
       password: "",
     },
   });
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 760);
+    };
+
+    checkScreenSize();
+
+    window.addEventListener("resize", checkScreenSize);
+    
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+
+    }
+  }, []);
 
   const onSubmit = (data: SigninFormProps) => {
     console.log(data);
@@ -131,7 +146,7 @@ export default function Signinform({triggerOpen, setTriggerOpen}: SwitchProps) {
                         className="border-none focus:ring-[darkGreen] "
                         autoComplete="current-password"
                       />
-                      <Button onClick={toggleEye} className="absolute right-2 focus:ring-[darkGreen] ">
+                      <Button type="button" onClick={toggleEye} className="absolute right-2 focus:ring-[darkGreen] ">
                         {eyeOpen ? <EyeOff /> : <Eye />}
                       </Button>
                     </div>
@@ -155,14 +170,14 @@ export default function Signinform({triggerOpen, setTriggerOpen}: SwitchProps) {
       </Dialog>
     </Form>
 
-    <Signupform />
+    
     </div>
   );
   }
  
  return (
   <Form {...form}>
-  <Drawer open={true}>
+  <Drawer open={triggerOpen} onOpenChange={setTriggerOpen}>
     <DrawerContent className=" bg-white border-none px-[20px] gap-[12px]">
       <DrawerHeader className="flex items-center justify-center">
         <DrawerTitle>Nice to see you again!</DrawerTitle>

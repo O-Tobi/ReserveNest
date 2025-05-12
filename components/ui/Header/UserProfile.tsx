@@ -71,14 +71,14 @@ export function UserProfile() {
 
           <DropdownMenuItem>
             {session ? (
-              <div className="flex items-center gap-[8px]">
+              <div onClick={() => signOut()} className="flex items-center gap-[8px]">
                 <LogOut />
-                <span onClick={() => signOut()}>Sign out</span>
+                Sign out
               </div>
             ) : (
-              <div className="flex items-center gap-[8px]">
+              <div aria-label="Sign-in Button" onClick={handleDrawer} className="flex items-center gap-[8px] ">
                 <LogIn />
-                <span onClick={handleDrawer}>Log In</span>
+                Sign in
               </div>
             )}
           </DropdownMenuItem>
