@@ -24,7 +24,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { Separator } from "../separator";
 import { Google } from "../assets/assets";
 import Image from "next/image";
-import Link from "next/link";
 import { AuthTooltip } from "./AuthTooltip";
 import { Drawer, DrawerTitle, DrawerHeader, DrawerContent } from "../drawer";
 
@@ -68,7 +67,17 @@ export const signupSchema = z
     }
   });
 
-export default function Signupform() {
+type SwitchProps = {
+  triggerOpen: boolean;
+  setTriggerOpen: (open: boolean) => void;
+  openSignIn: () => void;
+};
+
+export default function Signupform({
+  triggerOpen,
+  setTriggerOpen,
+  openSignIn,
+}: SwitchProps) {
   const isDesktop = window.innerWidth >= 760;
   const [eyeOpen, setEyeOpen] = useState(false);
 
@@ -93,7 +102,7 @@ export default function Signupform() {
   if (isDesktop) {
     return (
       <Form {...form}>
-        <Dialog open={true}>
+        <Dialog open={triggerOpen} onOpenChange={setTriggerOpen}>
           <DialogContent className=" bg-white border-none px-[40px] pt-[40px] gap-[12px] w-4/6">
             <DialogHeader className="flex items-center justify-center">
               <DialogTitle>Welcome! Let’s get started.</DialogTitle>
@@ -209,8 +218,14 @@ export default function Signupform() {
 
             <p className="text-center w-full my-[20px]">
               Already have an account?{" "}
-              <span className="text-blue-600">
-                <Link href="./signin"> Sign in </Link>
+              <span
+                onClick={() => {
+                  setTriggerOpen(false);
+                  openSignIn();
+                }}
+                className="text-blue-600"
+              >
+                Sign in
               </span>
             </p>
           </DialogContent>
@@ -221,7 +236,7 @@ export default function Signupform() {
 
   return (
     <Form {...form}>
-      <Drawer open={true}>
+      <Drawer open={triggerOpen} onOpenChange={setTriggerOpen}>
         <DrawerContent className=" bg-white border-none px-[20px] gap-[12px]">
           <DrawerHeader className="flex items-center justify-center">
             <DrawerTitle>Welcome! Let’s get started.</DrawerTitle>
@@ -337,8 +352,14 @@ export default function Signupform() {
 
           <p className="text-center w-full my-[20px]">
             Already have an account?{" "}
-            <span className="text-blue-600">
-              <Link href="./signin"> Sign in </Link>
+            <span
+              onClick={() => {
+                setTriggerOpen(false);
+                openSignIn();
+              }}
+              className="text-blue-600"
+            >
+              Sign in
             </span>
           </p>
         </DrawerContent>

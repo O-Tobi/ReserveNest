@@ -15,23 +15,30 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Signinform from "../auth/SigninForm";
+import Signupform from "../auth/SignupForm";
 import { useState } from "react";
+//import useAuthRender from "@/app/contexts/useAuthRender";
 
 export function UserProfile() {
   const { data: session } = useSession();
-  const [open, setOpen] = useState<boolean>(false);
+  //const [open, setOpen] = useState<boolean>(false);
   const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
+  const [signInOpen, setSignInOpen] = useState<boolean>(false);
+  const [signUpOpen, setSignUpOPen] = useState<boolean>(false);
+  //const { isSignIn } = useAuthRender();
 
+  // handles the opening of the drawer and the closing of the dropdown menu
   const handleDrawer = () => {
-    setOpen((prev) => !prev);
+    setSignInOpen((prev) => !prev);
     setDropDownOpen(false);
   };
 
+  // controls what happens to the dropdown after user clicks the signin button
   const handleDropDown = () => {
-    if(open) {
-      setDropDownOpen((prev) => !prev)
+    if (signInOpen) {
+      setDropDownOpen((prev) => !prev);
     }
-  }
+  };
 
   return (
     <div>
@@ -48,8 +55,15 @@ export function UserProfile() {
               onClick={handleDropDown}
             />
           ) : (
-            <Button aria-label="User Profile" className="focus-visible:ring-0 w-[24px] h-[24px] md:w-[48px] md:h-[48px] rounded-[8px] p-[12px]  md:bg-[#007E47] ">
-              <UserRound onClick={handleDropDown} size={100} className="text-[#007E47] md:text-white " />
+            <Button
+              aria-label="User Profile"
+              className="focus-visible:ring-0 w-[24px] h-[24px] md:w-[48px] md:h-[48px] rounded-[8px] p-[12px]  md:bg-[#007E47] "
+            >
+              <UserRound
+                onClick={handleDropDown}
+                size={100}
+                className="text-[#007E47] md:text-white "
+              />
             </Button>
           )}
         </DropdownMenuTrigger>
@@ -71,12 +85,19 @@ export function UserProfile() {
 
           <DropdownMenuItem>
             {session ? (
-              <div onClick={() => signOut()} className="flex items-center gap-[8px]">
+              <div
+                onClick={() => signOut()}
+                className="flex items-center gap-[8px]"
+              >
                 <LogOut />
                 Sign out
               </div>
             ) : (
-              <div aria-label="Sign-in Button" onClick={handleDrawer} className="flex items-center gap-[8px] ">
+              <div
+                aria-label="Sign-in Button"
+                onClick={handleDrawer}
+                className="flex items-center gap-[8px] "
+              >
                 <LogIn />
                 Sign in
               </div>
@@ -85,7 +106,25 @@ export function UserProfile() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Signinform triggerOpen={open} setTriggerOpen={setOpen} />
+      {/* signin form */}
+      <Signinform
+        triggerOpen={signInOpen}
+        setTriggerOpen={setSignInOpen}
+        openSignUp={() => {
+          setSignInOpen(false);
+          setSignUpOPen(true);
+        }}
+      />
+
+      {/* signup form */}
+      <Signupform
+        triggerOpen={signUpOpen}
+        setTriggerOpen={setSignUpOPen}
+        openSignIn={() => {
+          setSignUpOPen(false);
+          setSignInOpen(true);
+        }}
+      />
     </div>
   );
 }

@@ -47,7 +47,6 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
 
-
   return (
     <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
   );
