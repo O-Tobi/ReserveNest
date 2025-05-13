@@ -26,6 +26,7 @@ import { Google } from "../assets/assets";
 import Image from "next/image";
 import { AuthTooltip } from "./AuthTooltip";
 import { Drawer, DrawerTitle, DrawerHeader, DrawerContent } from "../drawer";
+import { signIn } from "next-auth/react";
 
 type SignupFormProps = {
   email: string;
@@ -68,8 +69,8 @@ export const signupSchema = z
   });
 
 type SwitchProps = {
-  triggerOpen: boolean;
-  setTriggerOpen: (open: boolean) => void;
+  triggerOpen?: boolean;
+  setTriggerOpen?: (open: boolean) => void;
   openSignIn: () => void;
 };
 
@@ -109,7 +110,7 @@ export default function Signupform({
             </DialogHeader>
 
             <div className="flex justify-center w-full ">
-              <Button className=" w-4/6 rounded-[8px] border-[0.5px] border-[darkGreen] focus:ring-[darkGreen] hover:bg-[darkGreen]/10">
+              <Button onClick={() => signIn("google")} className=" w-4/6 rounded-[8px] border-[0.5px] border-[darkGreen] focus:ring-[darkGreen] hover:bg-[darkGreen]/10">
                 <Image src={Google} alt="signup with Google" /> Sign up with
                 Google
               </Button>
@@ -220,7 +221,6 @@ export default function Signupform({
               Already have an account?{" "}
               <span
                 onClick={() => {
-                  setTriggerOpen(false);
                   openSignIn();
                 }}
                 className="text-blue-600"
@@ -354,7 +354,6 @@ export default function Signupform({
             Already have an account?{" "}
             <span
               onClick={() => {
-                setTriggerOpen(false);
                 openSignIn();
               }}
               className="text-blue-600"

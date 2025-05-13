@@ -17,15 +17,13 @@ import Image from "next/image";
 import Signinform from "../auth/SigninForm";
 import Signupform from "../auth/SignupForm";
 import { useState } from "react";
-//import useAuthRender from "@/app/contexts/useAuthRender";
+
 
 export function UserProfile() {
   const { data: session } = useSession();
-  //const [open, setOpen] = useState<boolean>(false);
   const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
   const [signInOpen, setSignInOpen] = useState<boolean>(false);
   const [signUpOpen, setSignUpOPen] = useState<boolean>(false);
-  //const { isSignIn } = useAuthRender();
 
   // handles the opening of the drawer and the closing of the dropdown menu
   const handleDrawer = () => {

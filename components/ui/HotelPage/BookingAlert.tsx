@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button } from "../button";
 import {
   Drawer,
@@ -62,7 +63,22 @@ export default function BookingAlert({
   bookingCode
 }: BookingAlertProps) {
   // This component is used to show the booking alert dialog box when the user clicks on the book table button
-  const isDesktop = window.innerWidth >= 760;
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 760);
+    };
+
+    checkScreenSize();
+
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize)
+    };
+  }, []);
+
 
   if (isDesktop) {
     return (
@@ -80,13 +96,16 @@ export default function BookingAlert({
             </div>
           </DialogHeader>
 
-          <Separator className="border-[.4px] border-[#C5C5C5]/40 w-full" />
+          <div className="w-full">
+          <Separator className="border-[.4px] border-[#C5C5C5]/40" />
+          </div>
+
           <DialogDescription>
             <div className="flex flex-col justify-center items-center gap-[14px]">
               <p className="hotelName text-[28px] font-medium">
                 {restaurantName}
               </p>
-              <p className="address">
+              <p className="address w-full text-center">
                 {restaurantAddress}
               </p>
             </div>

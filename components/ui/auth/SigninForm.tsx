@@ -30,6 +30,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { Separator } from "../separator";
 import { Google } from "../assets/assets";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
+
 
 type SwitchProps = {
   triggerOpen: boolean;
@@ -54,6 +56,7 @@ export default function Signinform({
 }: SwitchProps) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [eyeOpen, setEyeOpen] = useState<boolean>(false);
+
 
   const toggleEye = () => {
     setEyeOpen((prev) => !prev);
@@ -97,7 +100,7 @@ export default function Signinform({
               </DialogHeader>
 
               <div className="flex justify-center w-full ">
-                <Button className=" w-4/6 rounded-[8px] border-[0.5px] border-[darkGreen] focus:ring-[darkGreen] hover:bg-[darkGreen]/10">
+                <Button onClick={() => signIn("google") } className=" w-4/6 rounded-[8px] border-[0.5px] border-[darkGreen] focus:ring-[darkGreen] hover:bg-[darkGreen]/10">
                   <Image src={Google} alt="SignIn with Google" /> Sign in with
                   Google
                 </Button>
@@ -154,7 +157,7 @@ export default function Signinform({
                           <Button
                             type="button"
                             onClick={toggleEye}
-                            className="absolute right-2 focus:ring-[darkGreen] "
+                            className="absolute p-0 right-2 focus:ring-[darkGreen] "
                           >
                             {eyeOpen ? <EyeOff /> : <Eye />}
                           </Button>
@@ -179,7 +182,6 @@ export default function Signinform({
                 <span
                   className="text-blue-600"
                   onClick={() => {
-                    setTriggerOpen(false);
                     openSignUp();
                   }}
                 >
@@ -260,7 +262,7 @@ export default function Signinform({
                       <Button
                         type="button"
                         onClick={toggleEye}
-                        className="absolute right-2 focus:ring-[darkGreen] "
+                        className="absolute right-2 p-0 focus:ring-[darkGreen] "
                       >
                         {eyeOpen ? <EyeOff /> : <Eye />}
                       </Button>
@@ -284,7 +286,6 @@ export default function Signinform({
             Don&apos;t have an account?{" "}
             <span
               onClick={() => {
-                setTriggerOpen(false);
                 openSignUp();
               }}
               className="text-blue-600"

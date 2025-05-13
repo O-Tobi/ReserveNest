@@ -26,6 +26,7 @@ import BookingAlert from "./BookingAlert";
 import getMockData from "@/lib/data";
 import generateBookingCode from "@/lib/generateBookingCode";
 import { checkCodeExists } from "@/lib/checkCodeExists";
+import Signinform from "../auth/SigninForm";
 //import { set } from "mongoose";
 
 //const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
@@ -121,7 +122,9 @@ export default function BookingForm({
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null); //get information about the restaurant for the booking alert
   const [bookingData, setBookingData] = useState<BookingDetailsProps | null>(null); //get information about the booking for the booking alert
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false)
+  const [isError, setIsError] = useState(false);
+  const [showSignIn, setShowSignIn] = useState<boolean>(false);
+  
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -189,6 +192,11 @@ export default function BookingForm({
   };
 
   const onSubmit = async (data: BookingFormValues) => {
+    if(!session){
+      setShowSignIn(true);
+      return;
+    }
+
     if (mealCount === 0) {
       setMealCountWarning("Please select a meal or more");
       return;
@@ -261,226 +269,233 @@ export default function BookingForm({
 
   //the booking form needs to be optimized for tablet screen
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col md:flex-row flex-wrap md:justify-center lg:justify-normal lg:flex-col w-full gap-[24px]"
-      >
-        {/* Calendar */}
-        <FormField
-          control={form.control}
-          name="bookedDate"
-          render={({ field }) => (
-            <div className="calendar flex flex-col gap-[16px]">
-              <h2 className="text-[22px] text-[darkGreen]">Choose Date</h2>
-              <div className="bg-white flex justify-center text-[darkGreen] rounded-[16px]">
-                <Calendar
-                  mode="single"
-                  selected={field.value ? new Date(field.value) : undefined}
-                  onSelect={(date) => {
-                    if (date) {
-                      const formatted = format(date, "yyyy-MM-dd");
-                      field.onChange(formatted);
-                    }
-                  }}
-                  modifiersStyles={{
-                    selected: {
-                      backgroundColor: "#004225",
-                      color: "white",
-                    },
-                  }}
-                  className="bg-white flex justify-center text-[darkGreen] rounded-[16px]"
-                />
-              </div>
-              <FormMessage className="text-red-500" />
-            </div>
-          )}
-        />
-
-        {/* Time Slots */}
-        <div className="timeSlot flex flex-col gap-[16px]">
-          <h2 className="text-[22px] text-[darkGreen]">Choose time slot</h2>
-          <div className="flex flex-col w-full bg-white rounded-[16px] p-[20px] gap-4">
-            <div className="flex gap-0 justify-between">
-              {mealTimes.map((meal) => (
-                <div className="flex flex-col w-1/3" key={meal.id}>
-                  <Button
-                    variant="ghost"
-                    className="flex justify-center text-[darkGreen] text-[12px]"
-                    onClick={timeClickHandler}
-                    value={meal.mealType}
-                    type="button"
-                  >
-                    {meal.mealType}
-                  </Button>
-                  <Separator
-                    className={`border-[2px] w-full transition-colors duration-500 ${
-                      selectedTime === meal.mealType
-                        ? "border-[darkGreen]"
-                        : "border-[darkGreen]/40"
-                    }`}
+    <div>
+      {showSignIn ? (<Signinform openSignUp={() => {}} triggerOpen={showSignIn} setTriggerOpen={setShowSignIn}/>): (
+        <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col md:flex-row flex-wrap md:justify-center lg:justify-normal lg:flex-col w-full gap-[24px]"
+        >
+          {/* Calendar */}
+          <FormField
+            control={form.control}
+            name="bookedDate"
+            render={({ field }) => (
+              <div className="calendar flex flex-col gap-[16px]">
+                <h2 className="text-[22px] text-[darkGreen]">Choose Date</h2>
+                <div className="bg-white flex justify-center text-[darkGreen] rounded-[16px]">
+                  <Calendar
+                    mode="single"
+                    selected={field.value ? new Date(field.value) : undefined}
+                    onSelect={(date) => {
+                      if (date) {
+                        const formatted = format(date, "yyyy-MM-dd");
+                        field.onChange(formatted);
+                      }
+                    }}
+                    modifiersStyles={{
+                      selected: {
+                        backgroundColor: "#004225",
+                        color: "white",
+                      },
+                    }}
+                    className="bg-white flex justify-center text-[darkGreen] rounded-[16px]"
                   />
                 </div>
-              ))}
-            </div>
-
-            <div className="flex justify-start items-center gap-[12px] flex-wrap">
-              {mealSelect?.time.map((t, index) => (
-                <Button
-                  key={index}
-                  value={t}
-                  onClick={timeSlotHandler}
-                  variant="outline"
-                  className={`border-[darkGreen] text-[12px] text-[darkGreen] p-[12px] gap-[10px] rounded-md ${
-                    timeClicked === t ? "bg-[darkGreen] text-white" : "bg-none"
-                  }`}
-                  type="button"
-                >
-                  {t}
-                </Button>
-              ))}
+                <FormMessage className="text-red-500" />
+              </div>
+            )}
+          />
+  
+          {/* Time Slots */}
+          <div className="timeSlot flex flex-col gap-[16px]">
+            <h2 className="text-[22px] text-[darkGreen]">Choose time slot</h2>
+            <div className="flex flex-col w-full bg-white rounded-[16px] p-[20px] gap-4">
+              <div className="flex gap-0 justify-between">
+                {mealTimes.map((meal) => (
+                  <div className="flex flex-col w-1/3" key={meal.id}>
+                    <Button
+                      variant="ghost"
+                      className="flex justify-center text-[darkGreen] text-[12px]"
+                      onClick={timeClickHandler}
+                      value={meal.mealType}
+                      type="button"
+                    >
+                      {meal.mealType}
+                    </Button>
+                    <Separator
+                      className={`border-[2px] w-full transition-colors duration-500 ${
+                        selectedTime === meal.mealType
+                          ? "border-[darkGreen]"
+                          : "border-[darkGreen]/40"
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
+  
+              <div className="flex justify-start items-center gap-[12px] flex-wrap">
+                {mealSelect?.time.map((t, index) => (
+                  <Button
+                    key={index}
+                    value={t}
+                    onClick={timeSlotHandler}
+                    variant="outline"
+                    className={`border-[darkGreen] text-[12px] text-[darkGreen] p-[12px] gap-[10px] rounded-md ${
+                      timeClicked === t ? "bg-[darkGreen] text-white" : "bg-none"
+                    }`}
+                    type="button"
+                  >
+                    {t}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-        {timeSlotWarning && <p className="text-red-500">{timeSlotWarning}</p>}
-
-        {/* Food Chosen */}
-        <div className="flex flex-col gap-[16px]">
-          <h2 className="text-[22px] text-[darkGreen]">Food Chosen</h2>
-          <div className="foods flex flex-col bg-white rounded-[16px] p-[20px] gap-[32px]">
-            <div className="food flex gap-[16px]">
-              <Image
-                src={foodImg}
-                alt={foodName}
-                width={76}
-                height={76}
-                className="object-cover rounded-[12px]"
-              />
-              <div className="foodDetails flex flex-col w-full gap-[8px]">
-                <h3 className="text-[16px] text-[darkGreen]">{foodName}</h3>
-                <p className="text-[12px] text-[darkGreen]">Vegetarian</p>
-                <div className="flex justify-between items-center py-[4px]">
-                  <p className="text-[16px] tracking-[0.5px] font-medium text-[lightGreen]">
-                    ${price}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <Button onClick={handleMealMinus} type="button">
-                      <SquareMinusIcon />
-                    </Button>
-                    {mealCount}
-                    <Button onClick={handleMealPlus} type="button">
-                      <SquarePlusIcon />
-                    </Button>
+          {timeSlotWarning && <p className="text-red-500">{timeSlotWarning}</p>}
+  
+          {/* Food Chosen */}
+          <div className="flex flex-col gap-[16px]">
+            <h2 className="text-[22px] text-[darkGreen]">Food Chosen</h2>
+            <div className="foods flex flex-col bg-white rounded-[16px] p-[20px] gap-[32px]">
+              <div className="food flex gap-[16px]">
+                <Image
+                  src={foodImg}
+                  alt={foodName}
+                  width={76}
+                  height={76}
+                  className="object-cover rounded-[12px]"
+                />
+                <div className="foodDetails flex flex-col w-full gap-[8px]">
+                  <h3 className="text-[16px] text-[darkGreen]">{foodName}</h3>
+                  <p className="text-[12px] text-[darkGreen]">Vegetarian</p>
+                  <div className="flex justify-between items-center py-[4px]">
+                    <p className="text-[16px] tracking-[0.5px] font-medium text-[lightGreen]">
+                      ${price}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Button onClick={handleMealMinus} type="button">
+                        <SquareMinusIcon />
+                      </Button>
+                      {mealCount}
+                      <Button onClick={handleMealPlus} type="button">
+                        <SquarePlusIcon />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
+              <Separator className="border-[0.5px] border-[#C5C5C5]/50" />
+              <div className="totalCost flex items-center justify-between text-[22px] text-[darkGreen]">
+                <p>Total Cost:</p>
+                <p>${totalCost}</p>
+              </div>
             </div>
-            <Separator className="border-[0.5px] border-[#C5C5C5]/50" />
-            <div className="totalCost flex items-center justify-between text-[22px] text-[darkGreen]">
-              <p>Total Cost:</p>
-              <p>${totalCost}</p>
+            {!mealCount && <p className="text-red-500">{mealCountWarning}</p>}
+          </div>
+  
+          {/* Booking Details */}
+          <div className="bookingDetails flex flex-col gap-[16px]">
+            <h2 className="text-[22px] text-[darkGreen]">Booking details</h2>
+            <div className="details flex flex-col bg-white rounded-[16px] p-[20px] gap-[20px]">
+              {/*choose number of guests  */}
+              <FormField
+                control={form.control}
+                name="guestNumber"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-[12px]">
+                    <FormLabel className="text-[darkGreen]">
+                      Choose number of guest:
+                    </FormLabel>
+                    <FormControl>
+                      <GuestSelect {...field} />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+  
+              {/* guest name */}
+              <FormField
+                control={form.control}
+                name="guestName"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-[12px]">
+                    <FormLabel className="text-[darkGreen]">
+                      Enter guest name:
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="text"
+                        placeholder="Name for person who is booking."
+                        className="border-[darkGreen]/50 text-[darkGreen] rounded-[8px]"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+  
+              {/* mobile number */}
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-[12px]">
+                    <FormLabel className="text-[darkGreen]">
+                      Enter Phone detail
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="tel"
+                        placeholder="+234 000 000 000"
+                        className="border-[darkGreen]/50 text-[darkGreen] rounded-[8px]"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
-          {!mealCount && <p className="text-red-500">{mealCountWarning}</p>}
-        </div>
+  
+          {/* Submit button renders a loading animation if booking is being processed */}
+          {/* if user is not authenticated, render the signin page  */}
+          <Button
+            type="submit"
+            className="w-full h-[56px] bg-[darkGreen] text-white"
+          >
+           {isLoading ? (
+            <div className="flex flex-row jusitify-center items-center gap-2">
+              <p className="text-white/50">Book Now</p> <LoaderCircle className="animate-spin " strokeWidth="2.75"/>
+            </div>
+           ): ("Book Now")}
+          </Button>
+  
+  
+          {!isError ? (
+            <BookingAlert
+            // use params to get the restaurantID, name and address
+            bookingCode={bookingData?.bookingCode ?? ""}
+            restaurantName={restaurant?.hotelName ?? ""}
+            bookingDate={bookingData?.bookedDate ?? ""}
+            bookingTime={bookingData?.timeClicked ?? ""}
+            guestNumber={bookingData?.guestNumber ?? 0}
+            restaurantAddress={restaurant?.location ?? "Address not available"}
+            triggerOpen={drawerOpen}
+            setTriggerOpen={setDrawerOpen}
+          />
+          ) : (
+            // use alert component to show error message
+            <p className="text-red-500 animate-bounce duration-200">Error creating booking, please try again</p>
+          )}
+        </form>
+      </Form>
+      )}
 
-        {/* Booking Details */}
-        <div className="bookingDetails flex flex-col gap-[16px]">
-          <h2 className="text-[22px] text-[darkGreen]">Booking details</h2>
-          <div className="details flex flex-col bg-white rounded-[16px] p-[20px] gap-[20px]">
-            {/*choose number of guests  */}
-            <FormField
-              control={form.control}
-              name="guestNumber"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-[12px]">
-                  <FormLabel className="text-[darkGreen]">
-                    Choose number of guest:
-                  </FormLabel>
-                  <FormControl>
-                    <GuestSelect {...field} />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-
-            {/* guest name */}
-            <FormField
-              control={form.control}
-              name="guestName"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-[12px]">
-                  <FormLabel className="text-[darkGreen]">
-                    Enter guest name:
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      placeholder="Name for person who is booking."
-                      className="border-[darkGreen]/50 text-[darkGreen] rounded-[8px]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-
-            {/* mobile number */}
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-[12px]">
-                  <FormLabel className="text-[darkGreen]">
-                    Enter Phone detail
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="tel"
-                      placeholder="+234 000 000 000"
-                      className="border-[darkGreen]/50 text-[darkGreen] rounded-[8px]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Submit button renders a loading animation if booking is being processed */}
-        <Button
-          type="submit"
-          className="w-full h-[56px] bg-[darkGreen] text-white"
-        >
-         {isLoading ? (
-          <div className="flex flex-row jusitify-center items-center gap-2">
-            <p className="text-white/50">Book Now</p> <LoaderCircle className="animate-spin " strokeWidth="2.75"/>
-          </div>
-         ): ("Book Now")}
-        </Button>
-
-
-        {!isError ? (
-          <BookingAlert
-          // use params to get the restaurantID, name and address
-          bookingCode={bookingData?.bookingCode ?? ""}
-          restaurantName={restaurant?.hotelName ?? ""}
-          bookingDate={bookingData?.bookedDate ?? ""}
-          bookingTime={bookingData?.timeClicked ?? ""}
-          guestNumber={bookingData?.guestNumber ?? 0}
-          restaurantAddress={restaurant?.location ?? "Address not available"}
-          triggerOpen={drawerOpen}
-          setTriggerOpen={setDrawerOpen}
-        />
-        ) : (
-          // use alert component to show error message
-          <p className="text-red-500 animate-bounce duration-200">Error creating booking, please try again</p>
-        )}
-      </form>
-    </Form>
+    </div>
+     
   );
 }
