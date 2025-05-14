@@ -32,7 +32,6 @@ import { Google } from "../assets/assets";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 
-
 type SwitchProps = {
   triggerOpen: boolean;
   setTriggerOpen: (open: boolean) => void;
@@ -56,7 +55,6 @@ export default function Signinform({
 }: SwitchProps) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [eyeOpen, setEyeOpen] = useState<boolean>(false);
-
 
   const toggleEye = () => {
     setEyeOpen((prev) => !prev);
@@ -100,7 +98,10 @@ export default function Signinform({
               </DialogHeader>
 
               <div className="flex justify-center w-full ">
-                <Button onClick={() => signIn("google") } className=" w-4/6 rounded-[8px] border-[0.5px] border-[darkGreen] focus:ring-[darkGreen] hover:bg-[darkGreen]/10">
+                <Button
+                  onClick={() => signIn("google")}
+                  className=" w-4/6 rounded-[8px] border-[0.5px] border-[darkGreen] focus:ring-[darkGreen] hover:bg-[darkGreen]/10"
+                >
                   <Image src={Google} alt="SignIn with Google" /> Sign in with
                   Google
                 </Button>

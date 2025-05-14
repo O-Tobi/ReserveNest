@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as z from "zod";
 import {
   Dialog,
@@ -79,7 +79,7 @@ export default function Signupform({
   setTriggerOpen,
   openSignIn,
 }: SwitchProps) {
-  const isDesktop = window.innerWidth >= 760;
+  const [isDesktop, setIsDesktop] = useState<boolean>(false)
   const [eyeOpen, setEyeOpen] = useState(false);
 
   const toggleEye = () => {
@@ -99,6 +99,19 @@ export default function Signupform({
     console.log(data);
     form.reset();
   };
+
+  useEffect(() => {
+    const checkScreensize = () => {
+      setIsDesktop(window.innerWidth >= 760);
+    }
+    checkScreensize();
+
+    window.addEventListener("resize", checkScreensize);
+
+    return(() => {
+      window.removeEventListener("resize", checkScreensize)
+    })
+  }, [])
 
   if (isDesktop) {
     return (

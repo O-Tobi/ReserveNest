@@ -27,6 +27,7 @@ import getMockData from "@/lib/data";
 import generateBookingCode from "@/lib/generateBookingCode";
 import { checkCodeExists } from "@/lib/checkCodeExists";
 import Signinform from "../auth/SigninForm";
+import Signupform from "../auth/SignupForm";
 //import { set } from "mongoose";
 
 //const postMockAPI = process.env.NEXT_PUBLIC_POSTMOCKAPI_URI as string;
@@ -120,11 +121,13 @@ export default function BookingForm({
   const { data: session } = useSession();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null); //get information about the restaurant for the booking alert
-  const [bookingData, setBookingData] = useState<BookingDetailsProps | null>(null); //get information about the booking for the booking alert
+  const [bookingData, setBookingData] = useState<BookingDetailsProps | null>(
+    null
+  ); //get information about the booking for the booking alert
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [showSignIn, setShowSignIn] = useState<boolean>(false);
-  
+  const [showSignUp, setShowSignUp] = useState<boolean>(false);
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -161,7 +164,8 @@ export default function BookingForm({
   useEffect(() => {
     const fetchData = async () => {
       const allRestaurant = await getMockData("hotels");
-      const current = allRestaurant.find((res: Restaurant) => res.id === id) || null;
+      const current =
+        allRestaurant.find((res: Restaurant) => res.id === id) || null;
       setRestaurant(current || null);
       console.log("Restaurant data:", current);
     };
@@ -192,7 +196,7 @@ export default function BookingForm({
   };
 
   const onSubmit = async (data: BookingFormValues) => {
-    if(!session){
+    if (!session) {
       setShowSignIn(true);
       return;
     }
@@ -210,10 +214,10 @@ export default function BookingForm({
     let codeExists = await checkCodeExists(code);
 
     while (codeExists) {
-       code = generateBookingCode();
-       codeExists = await checkCodeExists(code);
+      code = generateBookingCode();
+      codeExists = await checkCodeExists(code);
     }
-    
+
     //payload should contain mealID and mealName
     const payload: BookingDetailsProps = {
       ...data,
@@ -231,8 +235,7 @@ export default function BookingForm({
       timeClicked,
       user: session?.user?.email,
     };
-  
-    
+
     try {
       setIsLoading(true);
       const response = await fetch("/api/booking", {
@@ -246,7 +249,6 @@ export default function BookingForm({
       if (!response.ok) {
         throw new Error("Failed to submit booking");
       }
-      
 
       const result = await response.json();
       console.log("Booking successful:", result);
@@ -255,7 +257,6 @@ export default function BookingForm({
       console.log("Booking data:", payload);
       setDrawerOpen(true);
 
-
       resetForm();
     } catch (error) {
       console.error("Error submitting booking:", error);
@@ -263,15 +264,37 @@ export default function BookingForm({
       setIsLoading(false);
       return;
     }
-  
+
     setIsLoading(false);
   };
 
   //the booking form needs to be optimized for tablet screen
-  return (
-    <div>
-      {showSignIn ? (<Signinform openSignUp={() => {}} triggerOpen={showSignIn} setTriggerOpen={setShowSignIn}/>): (
-        <Form {...form}>
+  //conditionally render the authentiction into the booking such that users are presented with both authentition forms as the case may be if they're not authenticated 
+  if (showSignIn) {
+    return (
+      <Signinform
+        openSignUp={() => {
+          setShowSignIn(false);
+          setShowSignUp(true);
+        }}
+        triggerOpen={showSignIn}
+        setTriggerOpen={setShowSignIn}
+      />
+    );
+  } else if (showSignUp) {
+    return (
+      <Signupform
+        triggerOpen={showSignUp}
+        setTriggerOpen={setShowSignUp}
+        openSignIn={() => {
+          setShowSignUp(false);
+          setShowSignIn(true);
+        }}
+      />
+    );
+  } else {
+    return (
+      <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col md:flex-row flex-wrap md:justify-center lg:justify-normal lg:flex-col w-full gap-[24px]"
@@ -306,7 +329,7 @@ export default function BookingForm({
               </div>
             )}
           />
-  
+
           {/* Time Slots */}
           <div className="timeSlot flex flex-col gap-[16px]">
             <h2 className="text-[22px] text-[darkGreen]">Choose time slot</h2>
@@ -333,7 +356,7 @@ export default function BookingForm({
                   </div>
                 ))}
               </div>
-  
+
               <div className="flex justify-start items-center gap-[12px] flex-wrap">
                 {mealSelect?.time.map((t, index) => (
                   <Button
@@ -342,7 +365,9 @@ export default function BookingForm({
                     onClick={timeSlotHandler}
                     variant="outline"
                     className={`border-[darkGreen] text-[12px] text-[darkGreen] p-[12px] gap-[10px] rounded-md ${
-                      timeClicked === t ? "bg-[darkGreen] text-white" : "bg-none"
+                      timeClicked === t
+                        ? "bg-[darkGreen] text-white"
+                        : "bg-none"
                     }`}
                     type="button"
                   >
@@ -353,7 +378,7 @@ export default function BookingForm({
             </div>
           </div>
           {timeSlotWarning && <p className="text-red-500">{timeSlotWarning}</p>}
-  
+
           {/* Food Chosen */}
           <div className="flex flex-col gap-[16px]">
             <h2 className="text-[22px] text-[darkGreen]">Food Chosen</h2>
@@ -393,7 +418,7 @@ export default function BookingForm({
             </div>
             {!mealCount && <p className="text-red-500">{mealCountWarning}</p>}
           </div>
-  
+
           {/* Booking Details */}
           <div className="bookingDetails flex flex-col gap-[16px]">
             <h2 className="text-[22px] text-[darkGreen]">Booking details</h2>
@@ -414,7 +439,7 @@ export default function BookingForm({
                   </FormItem>
                 )}
               />
-  
+
               {/* guest name */}
               <FormField
                 control={form.control}
@@ -436,7 +461,7 @@ export default function BookingForm({
                   </FormItem>
                 )}
               />
-  
+
               {/* mobile number */}
               <FormField
                 control={form.control}
@@ -460,42 +485,45 @@ export default function BookingForm({
               />
             </div>
           </div>
-  
+
           {/* Submit button renders a loading animation if booking is being processed */}
           {/* if user is not authenticated, render the signin page  */}
           <Button
             type="submit"
             className="w-full h-[56px] bg-[darkGreen] text-white"
           >
-           {isLoading ? (
-            <div className="flex flex-row jusitify-center items-center gap-2">
-              <p className="text-white/50">Book Now</p> <LoaderCircle className="animate-spin " strokeWidth="2.75"/>
-            </div>
-           ): ("Book Now")}
+            {isLoading ? (
+              <div className="flex flex-row jusitify-center items-center gap-2">
+                <p className="text-white/50">Book Now</p>{" "}
+                <LoaderCircle className="animate-spin " strokeWidth="2.75" />
+              </div>
+            ) : (
+              "Book Now"
+            )}
           </Button>
-  
-  
+
           {!isError ? (
             <BookingAlert
-            // use params to get the restaurantID, name and address
-            bookingCode={bookingData?.bookingCode ?? ""}
-            restaurantName={restaurant?.hotelName ?? ""}
-            bookingDate={bookingData?.bookedDate ?? ""}
-            bookingTime={bookingData?.timeClicked ?? ""}
-            guestNumber={bookingData?.guestNumber ?? 0}
-            restaurantAddress={restaurant?.location ?? "Address not available"}
-            triggerOpen={drawerOpen}
-            setTriggerOpen={setDrawerOpen}
-          />
+              // use params to get the restaurantID, name and address
+              bookingCode={bookingData?.bookingCode ?? ""}
+              restaurantName={restaurant?.hotelName ?? ""}
+              bookingDate={bookingData?.bookedDate ?? ""}
+              bookingTime={bookingData?.timeClicked ?? ""}
+              guestNumber={bookingData?.guestNumber ?? 0}
+              restaurantAddress={
+                restaurant?.location ?? "Address not available"
+              }
+              triggerOpen={drawerOpen}
+              setTriggerOpen={setDrawerOpen}
+            />
           ) : (
             // use alert component to show error message
-            <p className="text-red-500 animate-bounce duration-200">Error creating booking, please try again</p>
+            <p className="text-red-500 animate-bounce duration-200">
+              Error creating booking, please try again
+            </p>
           )}
         </form>
       </Form>
-      )}
-
-    </div>
-     
-  );
+    );
+  }
 }
